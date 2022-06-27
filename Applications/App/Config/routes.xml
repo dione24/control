@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+    <route url="/" module="Afficher" action="home"/>
+
+    <route url="/rapports/ajouter/financier" module="Administrer" action="financier"/>
+    <route url="/rapports/ajouter/marketing" module="Administrer" action="marketing"/>
+    <route url="/rapports/ajouter/operations" module="Administrer" action="operations"/>
+    <route url="/rapports/ajouter/rh" module="Administrer" action="rh"/>
+
+
+
+
+    <route url="/Logout" module="Connexion" action="logout"/>
+
+
+
+
+    <route url="/Profile" module="Connexion" action ="Profile"/>
+    <route url="/CheckPassword" module="Connexion" action="CheckPassword"/>
+    <route url="/NewPassword" module="Connexion" action="NewPassword"/>
+    <route url="/ValidPassword" module="Connexion" action="ValidPassword"/>
+    <route url="/Pannel" module="Connexion" action="Pannel"/>
+    <route url="/addUsers" module="Connexion" action="addUsers"/>
+    <route url="/deleteUsers/([0-9]+)" module="Connexion" vars="id" action="deleteusers"/>
+    <route url="/editUsers/([0-9]+)" module="Connexion" vars="id" action="editUsers"/>
+    <route url="/updateUsers" module="Connexion" action="updateUsers"/>
+
+</routes>
