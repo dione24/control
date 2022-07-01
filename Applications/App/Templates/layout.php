@@ -15,6 +15,10 @@
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="/assets/css/dashlite.css?ver=3.0.0">
     <link id="skin-default" rel="stylesheet" href="/assets/css/theme.css?ver=3.0.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/solid.css"
+        integrity="sha384-Tv5i09RULyHKMwX0E8wJUqSOaXlyu3SQxORObAI08iUwIalMmN5L6AvlPX2LMoSE" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/fontawesome.css"
+        integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous" />
 </head>
 
 <body class="nk-body bg-lighter npc-general has-sidebar ">
@@ -108,6 +112,29 @@
                                         <span class="nk-menu-text">KPI Operations</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">Paramètres</h6>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="/entreprises/index" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-dashlite"></em></span>
+                                        <span class="nk-menu-text">Enteprises</span>
+                                    </a>
+                                </li>
+                                <li class="nk-menu-item">
+                                    <a href="/poles-activites/index" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-dashlite"></em></span>
+                                        <span class="nk-menu-text">Pôles d'activités</span>
+                                    </a>
+                                </li>
+                                <li class="nk-menu-item">
+                                    <a href="/rapports/config" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-dashlite"></em></span>
+                                        <span class="nk-menu-text">Rapports</span>
+                                    </a>
+                                </li>
+
+                                <!-- .nk-menu-item -->
                             </ul><!-- .nk-menu -->
                         </div><!-- .nk-sidebar-menu -->
                     </div><!-- .nk-sidebar-content -->
@@ -125,7 +152,7 @@
                                         class="icon ni ni-menu"></em></a>
                             </div>
                             <div class="nk-header-brand d-xl-none">
-                                <a href="html/index.html" class="logo-link">
+                                <a href="/" class="logo-link">
                                     <img class="logo-light logo-img" src="/images/logo.png"
                                         srcset="/images/logo2x.png 2x" alt="logo">
                                     <img class="logo-dark logo-img" src="/images/logo-dark.png"

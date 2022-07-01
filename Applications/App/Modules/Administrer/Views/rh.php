@@ -2,7 +2,6 @@
      <div class="nk-content-inner">
          <div class="nk-content-body">
              <div class="nk-block-head nk-block-head-sm">
-
                  <div class="card card-bordered">
                      <div class="card-inner">
                          <div class="card-head">
@@ -23,7 +22,6 @@
                                          </div>
                                      </div>
                                  </div>
-
                                  <div class="col-lg-2">
                                      <div class="form-group">
                                          <label class="form-label" for="full-name-1">Annee</label>
@@ -37,10 +35,10 @@
                              <div class="row g-4">
                                  <div class="col-lg-2">
                                      <div class="form-group">
-                                         <label class="form-label" for="full-name-1">Chiffre d'Affaires</label>
+                                         <label class="form-label" for="full-name-1">Effectif par sociétés</label>
                                          <div class="form-control-wrap">
                                              <input type="text" class="form-control" id="full-name-1"
-                                                 value="Chiffre d'Affaires" readonly>
+                                                 value="Effectif par sociétés " readonly>
                                          </div>
                                      </div>
                                  </div>
@@ -70,7 +68,6 @@
                                          </div>
                                      </div>
                                  </div>
-
                                  <div class="col-lg-2">
                                      <div class="form-group">
                                          <label class="form-label" for="phone-no-1">Prévisions</label>
