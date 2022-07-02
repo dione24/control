@@ -2,16 +2,16 @@
 <routes>
     <route url="/" module="Afficher" action="home"/>
 
-    <route url="/rapports/ajouter/financier" module="Administrer" action="financier"/>
-    <route url="/rapports/ajouter/marketing" module="Administrer" action="marketing"/>
-    <route url="/rapports/ajouter/operations" module="Administrer" action="operations"/>
-    <route url="/rapports/ajouter/rh" module="Administrer" action="rh"/>
+    <route url="/rapports/ajouter/([0-9]+)" module="Administrer" vars="id" action="form"/>
+
 
     <route url="/entreprises/index" module="Administrer" action="entreprise"/>
     <route url="/poles-activites/index" module="Administrer" action="pole"/>
 
     <route url="/rapports/config" module="Administrer" action="rapports"/>
     <route url="/rapports/config/view/([0-9]+)" module="Administrer" vars="id" action="configview"/>
+
+    <route url="/rapports/kpi" module="Administrer" action="pannel"/>
 
     <route url="/Logout" module="Connexion" action="logout"/>
 

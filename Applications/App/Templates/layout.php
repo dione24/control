@@ -80,7 +80,7 @@
                                     </ul><!-- .nk-menu-sub -->
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="html/hotel/index.html" class="nk-menu-link">
+                                    <a href="/rapports/kpi" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-building"></em></span>
                                         <span class="nk-menu-text">KPI</span><span class="nk-menu-badge">HOT</span>
                                     </a>

@@ -5,52 +5,24 @@ namespace Applications\App\Modules\Administrer;
 class AdministrerController extends \Library\BackController
 {
 
-    public function executeFinancier(\Library\HTTPRequest $request)
+    public function executeForm(\Library\HTTPRequest $request)
     {
-        $this->page->addVar("titles", "Ajouter un Rapport Financier");
+        $this->page->addVar("titles", "Ajouter un Rapport ");
 
         $mois = $this->managers->getManagerOf('Administrer')->getMois();
         $this->page->addVar("mois", $mois);
-        if ($request->method() == 'POST') {
-            $this->managers->getManagerOf('Administrer')->addRapportFinancier($request);
-            $this->app()->httpResponse()->redirect("/rapports");
-        }
-    }
-    public function executeOperations(\Library\HTTPRequest $request)
-    {
-        $this->page->addVar("titles", "Ajouter un Rapport des Operations");
 
-        $mois = $this->managers->getManagerOf('Administrer')->getMois();
-        $this->page->addVar("mois", $mois);
+        $rapport = $this->managers->getManagerOf("Administrer")->singleRapport($request->getData('id'));
+        $this->page->addVar("rapport", $rapport);
+
+        $elements = $this->managers->getManagerOf("Administrer")->getElements($request->getData('id'));
+        $this->page->addVar("elements", $elements);
         if ($request->method() == 'POST') {
-            $this->managers->getManagerOf('Administrer')->addRapportFinancier($request);
-            $this->app()->httpResponse()->redirect("/operations");
+            $this->managers->getManagerOf('Administrer')->addRapport($request);
+            $this->app()->httpResponse()->redirect("/rapports/kpi");
         }
     }
 
-    public function executeMarketing(\Library\HTTPRequest $request)
-    {
-        $this->page->addVar("titles", "Ajouter un Rapport Marketing");
-
-        $mois = $this->managers->getManagerOf('Administrer')->getMois();
-        $this->page->addVar("mois", $mois);
-        if ($request->method() == 'POST') {
-            $this->managers->getManagerOf('Administrer')->addRapportMarketing($request);
-            $this->app()->httpResponse()->redirect("/marketing");
-        }
-    }
-
-    public function executeRh(\Library\HTTPRequest $request)
-    {
-        $this->page->addVar("titles", "Ajouter un Rapport RH");
-
-        $mois = $this->managers->getManagerOf('Administrer')->getMois();
-        $this->page->addVar("mois", $mois);
-        if ($request->method() == 'POST') {
-            $this->managers->getManagerOf('Administrer')->addRapportRh($request);
-            $this->app()->httpResponse()->redirect("/rh");
-        }
-    }
 
     public function executeEntreprise(\Library\HTTPRequest $request)
     {
@@ -109,5 +81,13 @@ class AdministrerController extends \Library\BackController
 
         $elements = $this->managers->getManagerOf("Administrer")->getElements($request->getData('id'));
         $this->page->addVar("elements", $elements);
+    }
+
+    public function executePannel(\Library\HTTPRequest $request)
+    {
+        $this->page->addVar("titles", "KPI");
+
+        $rapports = $this->managers->getManagerOf("Administrer")->getTypeRapport();
+        $this->page->addVar("rapports", $rapports);
     }
 }

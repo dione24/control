@@ -72,4 +72,23 @@ class AdministrerManagerPDO extends \Library\Models\AdministrerManager
         $lesElements = $requete->fetchAll();
         return $lesElements;
     }
+
+    public function singleRapport($id)
+    {
+        $requete = $this->dao->prepare("SELECT * FROM tbltyperapport WHERE RefTypeRapport=:id");
+        $requete->bindValue(':id', $id, \PDO::PARAM_INT);
+        $requete->execute();
+        $lesTypesRapport = $requete->fetch();
+        return $lesTypesRapport;
+    }
+
+    public function addRapport()
+    {
+        foreach ($_POST['RefRapportElements'] as $key => $value) {
+            $requeteInsert = $this->dao->prepare('INSERT INTO rapportscontent(RefTypeRapport,moisencours,moisn1,moisprecedent,previsions) VALUES(:RefTypeRapport,:moisencours,moisn1,moisprecedent,previsions)');
+            $requeteInsert->bindValue(':RefUsers', $_POST['RefUsers'], \PDO::PARAM_INT);
+            $requeteInsert->bindValue(':access', $value, \PDO::PARAM_INT);
+            $requeteInsert->execute();
+        }
+    }
 }
