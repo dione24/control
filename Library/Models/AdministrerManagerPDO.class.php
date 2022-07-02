@@ -85,9 +85,14 @@ class AdministrerManagerPDO extends \Library\Models\AdministrerManager
     public function addRapport()
     {
         foreach ($_POST['RefRapportElements'] as $key => $value) {
-            $requeteInsert = $this->dao->prepare('INSERT INTO rapportscontent(RefTypeRapport,moisencours,moisn1,moisprecedent,previsions) VALUES(:RefTypeRapport,:moisencours,moisn1,moisprecedent,previsions)');
-            $requeteInsert->bindValue(':RefUsers', $_POST['RefUsers'], \PDO::PARAM_INT);
-            $requeteInsert->bindValue(':access', $value, \PDO::PARAM_INT);
+            $requeteInsert = $this->dao->prepare('INSERT INTO rapportscontent(RefTypeRapport,moisencours,moisn1,moisprecedent,previsions,RefMois,annee) VALUES(:RefTypeRapport,:moisencours,moisn1,moisprecedent,previsions,:RefMois,:annee)');
+            $requeteInsert->bindValue(':RefTypeRapport', $_POST['RefTypeRapport'], \PDO::PARAM_INT);
+            $requeteInsert->bindValue(':moisencours', $_POST['moisencours'], \PDO::PARAM_STR);
+            $requeteInsert->bindValue(':moisn1', $_POST['moisn1'], \PDO::PARAM_STR);
+            $requeteInsert->bindValue(':moisprecedent', $_POST['moisprecedent'], \PDO::PARAM_STR);
+            $requeteInsert->bindValue(':previsions', $_POST['previsions'], \PDO::PARAM_STR);
+            $requeteInsert->bindValue(':RefMois', $_POST['RefMois'], \PDO::PARAM_INT);
+            $requeteInsert->bindValue(':annee', $_POST['annee'], \PDO::PARAM_STR);
             $requeteInsert->execute();
         }
     }

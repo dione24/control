@@ -19,7 +19,7 @@ class AdministrerController extends \Library\BackController
         $this->page->addVar("elements", $elements);
         if ($request->method() == 'POST') {
             $this->managers->getManagerOf('Administrer')->addRapport($request);
-            $this->app()->httpResponse()->redirect("/rapports/kpi");
+            //$this->app()->httpResponse()->redirect("/rapports/kpi");
         }
     }
 
