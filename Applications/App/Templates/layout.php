@@ -50,39 +50,11 @@
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">Use-Case Preview</h6>
                                 </li><!-- .nk-menu-item -->
-                                <li class="nk-menu-item has-sub">
-                                    <a href="#" class="nk-menu-link nk-menu-toggle" data-bs-original-title="" title="">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-card-view"></em></span>
-                                        <span class="nk-menu-text">RAPPORTS</span>
-                                    </a>
-                                    <ul class="nk-menu-sub" style="display: none;">
-                                        <li class="nk-menu-item">
-                                            <a href="/rapports/ajouter/financier" class="nk-menu-link"
-                                                data-bs-original-title="" title=""><span class="nk-menu-text">Financier
-                                                </span></a>
-                                        </li>
-                                        <li class="nk-menu-item">
-                                            <a href="/rapports/ajouter/marketing" class="nk-menu-link"
-                                                data-bs-original-title="" title=""><span
-                                                    class="nk-menu-text">Marketing/Commercial
-                                                </span></a>
-                                        </li>
-                                        <li class="nk-menu-item">
-                                            <a href="/rapports/ajouter/operations" class="nk-menu-link"
-                                                data-bs-original-title="" title=""><span class="nk-menu-text">Operations
-                                                </span></a>
-                                        </li>
-                                        <li class="nk-menu-item">
-                                            <a href="/rapports/ajouter/rh" class="nk-menu-link"
-                                                data-bs-original-title="" title=""><span class="nk-menu-text">RH
-                                                </span></a>
-                                        </li>
-                                    </ul><!-- .nk-menu-sub -->
-                                </li>
+
                                 <li class="nk-menu-item">
                                     <a href="/rapports/kpi" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-building"></em></span>
-                                        <span class="nk-menu-text">KPI</span><span class="nk-menu-badge">HOT</span>
+                                        <span class="nk-menu-text">KPI</span><span class="nk-menu-badge">NEW</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-heading">
@@ -112,6 +84,7 @@
                                         <span class="nk-menu-text">KPI Operations</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
+                                <?php if ($_SESSION['Statut'] != 'user') { ?>
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">Paramètres</h6>
                                 </li><!-- .nk-menu-item -->
@@ -133,6 +106,16 @@
                                         <span class="nk-menu-text">Rapports</span>
                                     </a>
                                 </li>
+                                <?php if ($_SESSION['Statut'] == 'admin') { ?>
+                                <li class="nk-menu-item">
+                                    <a href="/users/index" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-dashlite"></em></span>
+                                        <span class="nk-menu-text">Utilisateurs</span>
+                                    </a>
+                                </li>
+
+                                <?php }
+                                }  ?>
 
                                 <!-- .nk-menu-item -->
                             </ul><!-- .nk-menu -->
@@ -187,8 +170,9 @@
                                                     <em class="icon ni ni-user-alt"></em>
                                                 </div>
                                                 <div class="user-info d-none d-md-block">
-                                                    <div class="user-status">Administrator</div>
-                                                    <div class="user-name dropdown-indicator">Abu Bin Ishityak</div>
+                                                    <div class="user-status"><?= $_SESSION['Statut']; ?></div>
+                                                    <div class="user-name dropdown-indicator">
+                                                        <?= $_SESSION['Nom'] . ' ' . $_SESSION['Prenom']; ?></div>
                                                 </div>
                                             </div>
                                         </a>
@@ -196,25 +180,21 @@
                                             <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
                                                 <div class="user-card">
                                                     <div class="user-avatar">
-                                                        <span>AB</span>
+
                                                     </div>
                                                     <div class="user-info">
-                                                        <span class="lead-text">Abu Bin Ishtiyak</span>
-                                                        <span class="sub-text">info@softnio.com</span>
+                                                        <span class="lead-text">
+                                                            <?= $_SESSION['Nom'] . ' ' . $_SESSION['Prenom']; ?></span>
+                                                        <span class="sub-text"><?= $_SESSION['Email']; ?></span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="dropdown-inner">
                                                 <ul class="link-list">
-                                                    <li><a href="html/user-profile-regular.html"><em
-                                                                class="icon ni ni-user-alt"></em><span>View
+                                                    <li><a href="/user/profile"><em
+                                                                class="icon ni ni-user-alt"></em><span>
                                                                 Profile</span></a></li>
-                                                    <li><a href="html/user-profile-setting.html"><em
-                                                                class="icon ni ni-setting-alt"></em><span>Account
-                                                                Setting</span></a></li>
-                                                    <li><a href="html/user-profile-activity.html"><em
-                                                                class="icon ni ni-activity-alt"></em><span>Login
-                                                                Activity</span></a></li>
+
                                                     <li><a class="dark-switch" href="#"><em
                                                                 class="icon ni ni-moon"></em><span>Dark Mode</span></a>
                                                     </li>
@@ -222,8 +202,9 @@
                                             </div>
                                             <div class="dropdown-inner">
                                                 <ul class="link-list">
-                                                    <li><a href="#"><em class="icon ni ni-signout"></em><span>Sign
-                                                                out</span></a></li>
+                                                    <li><a href="/Logout"><em class="icon ni ni-signout"></em><span>Se
+                                                                déconnecter</span></a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -252,63 +233,7 @@
                                                             <div class="nk-notification-time">2 hrs ago</div>
                                                         </div>
                                                     </div>
-                                                    <div class="nk-notification-item dropdown-inner">
-                                                        <div class="nk-notification-icon">
-                                                            <em
-                                                                class="icon icon-circle bg-success-dim ni ni-curve-down-left"></em>
-                                                        </div>
-                                                        <div class="nk-notification-content">
-                                                            <div class="nk-notification-text">Your <span>Deposit
-                                                                    Order</span> is placed</div>
-                                                            <div class="nk-notification-time">2 hrs ago</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="nk-notification-item dropdown-inner">
-                                                        <div class="nk-notification-icon">
-                                                            <em
-                                                                class="icon icon-circle bg-warning-dim ni ni-curve-down-right"></em>
-                                                        </div>
-                                                        <div class="nk-notification-content">
-                                                            <div class="nk-notification-text">You have requested to
-                                                                <span>Widthdrawl</span>
-                                                            </div>
-                                                            <div class="nk-notification-time">2 hrs ago</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="nk-notification-item dropdown-inner">
-                                                        <div class="nk-notification-icon">
-                                                            <em
-                                                                class="icon icon-circle bg-success-dim ni ni-curve-down-left"></em>
-                                                        </div>
-                                                        <div class="nk-notification-content">
-                                                            <div class="nk-notification-text">Your <span>Deposit
-                                                                    Order</span> is placed</div>
-                                                            <div class="nk-notification-time">2 hrs ago</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="nk-notification-item dropdown-inner">
-                                                        <div class="nk-notification-icon">
-                                                            <em
-                                                                class="icon icon-circle bg-warning-dim ni ni-curve-down-right"></em>
-                                                        </div>
-                                                        <div class="nk-notification-content">
-                                                            <div class="nk-notification-text">You have requested to
-                                                                <span>Widthdrawl</span>
-                                                            </div>
-                                                            <div class="nk-notification-time">2 hrs ago</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="nk-notification-item dropdown-inner">
-                                                        <div class="nk-notification-icon">
-                                                            <em
-                                                                class="icon icon-circle bg-success-dim ni ni-curve-down-left"></em>
-                                                        </div>
-                                                        <div class="nk-notification-content">
-                                                            <div class="nk-notification-text">Your <span>Deposit
-                                                                    Order</span> is placed</div>
-                                                            <div class="nk-notification-time">2 hrs ago</div>
-                                                        </div>
-                                                    </div>
+
                                                 </div><!-- .nk-notification -->
                                             </div><!-- .nk-dropdown-body -->
                                             <div class="dropdown-foot center">
@@ -331,8 +256,8 @@
                 <div class="nk-footer">
                     <div class="container-fluid">
                         <div class="nk-footer-wrap">
-                            <div class="nk-footer-copyright"> &copy; 2022 DashLite. Template by <a
-                                    href="https://softnio.com" target="_blank">Softnio</a>
+                            <div class="nk-footer-copyright"> &copy; 2022 DashLite. Developed by <a
+                                    href="https://niangaly.com" target="_blank">NIANGALY</a>
                             </div>
                             <div class="nk-footer-links">
                                 <ul class="nav nav-sm">

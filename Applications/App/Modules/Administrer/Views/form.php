@@ -10,6 +10,27 @@
                          <form method="POST">
                              <input type="hidden" name="RefTypeRapport" value="<?= $rapport['RefTypeRapport']; ?>" />
                              <div class="row g-4">
+
+                                 <?php if ($_SESSION['Statut'] == 'user') { ?>
+                                 <input type="hidden" name="RefEntreprise" value="<?= $_SESSION['RefEntreprise']; ?>" />
+                                 <?php } else { ?>
+                                 <div class="col-lg-2">
+                                     <div class="form-group">
+                                         <label class="form-label" for="full-name-1">Entreprise</label>
+                                         <div class="form-control-wrap">
+
+                                             <select class="form-control" id="full-name-1" name="RefEntreprise">
+                                                 <?php foreach ($entreprises as $entreprise) { ?>
+                                                 <option value="<?= $entreprise['RefEntreprise']; ?>">
+                                                     <?= $entreprise['nomEntreprise']; ?></option>
+
+                                                 </option>
+                                                 <?php } ?>
+                                             </select>
+                                         </div>
+                                     </div>
+                                 </div>
+                                 <?php } ?>
                                  <div class="col-lg-2">
                                      <div class="form-group">
                                          <label class="form-label" for="full-name-1">Mois</label>
@@ -35,7 +56,7 @@
                              </div>
                              </br>
                              <?php foreach ($elements as $key => $element) { ?>
-                             <input type="hidden" name="RefRapportElements"
+                             <input type="hidden" name="RefRapportElements[]" multiple
                                  value="<?= $element['RefRapportElements']; ?>" />
                              <div class="row g-4">
                                  <div class="col-lg-2">

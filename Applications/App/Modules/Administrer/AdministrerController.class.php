@@ -17,12 +17,15 @@ class AdministrerController extends \Library\BackController
 
         $elements = $this->managers->getManagerOf("Administrer")->getElements($request->getData('id'));
         $this->page->addVar("elements", $elements);
+
+        $entreprises = $this->managers->getManagerOf("Administrer")->getEntreprise();
+        $this->page->addVar("entreprises", $entreprises);
         if ($request->method() == 'POST') {
+
             $this->managers->getManagerOf('Administrer')->addRapport($request);
-            //$this->app()->httpResponse()->redirect("/rapports/kpi");
+            $this->app()->httpResponse()->redirect("/rapports/kpi");
         }
     }
-
 
     public function executeEntreprise(\Library\HTTPRequest $request)
     {
@@ -60,17 +63,27 @@ class AdministrerController extends \Library\BackController
         $this->page->addVar("entreprises", $entreprises);
 
         $rapports = $this->managers->getManagerOf("Administrer")->getTypeRapport();
-
         $this->page->addVar("rapports", $rapports);
+
+        foreach ($rapports as $key => $rapport) {
+            foreach ($entreprises as $clef => $entreprise) {
+                $enterprise[$rapport['RefTypeRapport']][$entreprise['RefEntreprise']] =
+                    $this->managers->getManagerOf('Administrer')->VerifChmod($rapport['RefTypeRapport'], $entreprise['RefEntreprise']);
+            }
+        }
+        $this->page->addVar("enterprise", $enterprise);
 
         if ($request->method() == 'POST' && !empty($_POST['nomRapport'])) {
             $this->managers->getManagerOf("Administrer")->addTypeRapport($request);
             $this->app()->httpResponse()->redirect("/rapports/config");
         }
 
-
         if ($request->method() == 'POST' && !empty($_POST['nomElement'])) {
             $this->managers->getManagerOf("Administrer")->addElement($request);
+            $this->app()->httpResponse()->redirect("/rapports/config");
+        }
+        if ($request->method() == 'POST' && !empty($_POST['RefEntreprise'])) {
+            $this->managers->getManagerOf("Administrer")->addChmod($request);
             $this->app()->httpResponse()->redirect("/rapports/config");
         }
     }
@@ -82,12 +95,17 @@ class AdministrerController extends \Library\BackController
         $elements = $this->managers->getManagerOf("Administrer")->getElements($request->getData('id'));
         $this->page->addVar("elements", $elements);
     }
-
     public function executePannel(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "KPI");
-
         $rapports = $this->managers->getManagerOf("Administrer")->getTypeRapport();
+        $this->page->addVar("rapports", $rapports);
+    }
+
+    public function executeView(\Library\HTTPRequest $request)
+    {
+        $this->page->addVar("titles", "Liste des Rapports");
+        $rapports = $this->managers->getManagerOf("Administrer")->getEntrepriseRapport($request->getData('id'));
         $this->page->addVar("rapports", $rapports);
     }
 }

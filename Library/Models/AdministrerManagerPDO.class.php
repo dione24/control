@@ -45,10 +45,18 @@ class AdministrerManagerPDO extends \Library\Models\AdministrerManager
 
     public function getTypeRapport()
     {
-        $requete = $this->dao->prepare("SELECT * FROM tbltyperapport");
-        $requete->execute();
-        $lesTypesRapport = $requete->fetchAll();
-        return $lesTypesRapport;
+        if ($_SESSION['Statut'] == 'user') {
+            $requete = $this->dao->prepare("SELECT * FROM tbltyperapport INNER JOIN chmodrapports ON tbltyperapport.RefTypeRapport = chmodrapports.RefTypeRapport WHERE chmodrapports.RefEntreprise=:RefEntreprise");
+            $requete->bindValue(':RefEntreprise', $_SESSION['RefEntreprise'], \PDO::PARAM_INT);
+            $requete->execute();
+            $lesTypesRapport = $requete->fetchAll();
+            return $lesTypesRapport;
+        } else {
+            $requete = $this->dao->prepare("SELECT * FROM tbltyperapport");
+            $requete->execute();
+            $lesTypesRapport = $requete->fetchAll();
+            return $lesTypesRapport;
+        }
     }
     public function addTypeRapport()
     {
@@ -84,16 +92,60 @@ class AdministrerManagerPDO extends \Library\Models\AdministrerManager
 
     public function addRapport()
     {
+
+        $query = $this->dao->prepare("INSERT INTO tblrapports(RefTypeRapport,RefEntreprise,RefMois,annee) VALUES(:RefTypeRapport,:RefEntreprise,:RefMois,:annee)");
+        $query->bindValue(':RefTypeRapport', $_POST['RefTypeRapport'], \PDO::PARAM_INT);
+        $query->bindValue(':RefEntreprise', $_POST['RefEntreprise'], \PDO::PARAM_INT);
+        $query->bindValue(':RefMois', $_POST['RefMois'], \PDO::PARAM_INT);
+        $query->bindValue(':annee', $_POST['annee'], \PDO::PARAM_INT);
+        $query->execute();
+        $rapportid = $this->dao->lastInsertId();
+
         foreach ($_POST['RefRapportElements'] as $key => $value) {
-            $requeteInsert = $this->dao->prepare('INSERT INTO rapportscontent(RefTypeRapport,moisencours,moisn1,moisprecedent,previsions,RefMois,annee) VALUES(:RefTypeRapport,:moisencours,moisn1,moisprecedent,previsions,:RefMois,:annee)');
-            $requeteInsert->bindValue(':RefTypeRapport', $_POST['RefTypeRapport'], \PDO::PARAM_INT);
-            $requeteInsert->bindValue(':moisencours', $_POST['moisencours'], \PDO::PARAM_STR);
-            $requeteInsert->bindValue(':moisn1', $_POST['moisn1'], \PDO::PARAM_STR);
-            $requeteInsert->bindValue(':moisprecedent', $_POST['moisprecedent'], \PDO::PARAM_STR);
-            $requeteInsert->bindValue(':previsions', $_POST['previsions'], \PDO::PARAM_STR);
-            $requeteInsert->bindValue(':RefMois', $_POST['RefMois'], \PDO::PARAM_INT);
-            $requeteInsert->bindValue(':annee', $_POST['annee'], \PDO::PARAM_STR);
-            $requeteInsert->execute();
+            $request = $this->dao->prepare("INSERT INTO rapportscontent(RefRapport,moisencours,moisn1,moisprecedent,previsions,RefRapportElements) VALUES (:RefRapport,:moisencours,:moisn1,:moisprecedent,:previsions,:RefRapportElements)");
+            $request->bindValue(':RefRapport', $rapportid, \PDO::PARAM_INT);
+            $request->bindValue(':moisencours', $_POST['moisencours'][$key], \PDO::PARAM_STR);
+            $request->bindValue(':moisn1', $_POST['moisn1'][$key], \PDO::PARAM_STR);
+            $request->bindValue(':moisprecedent', $_POST['moisprecedent'][$key], \PDO::PARAM_STR);
+            $request->bindValue(':previsions', $_POST['previsions'][$key], \PDO::PARAM_STR);
+            $request->bindValue(':RefRapportElements', $value, \PDO::PARAM_INT);
+            $request->execute();
         }
+    }
+
+    public function VerifChmod($rapport, $entreprise)
+    {
+        $requete = $this->dao->prepare("SELECT * FROM chmodrapports WHERE RefTypeRapport=:RefTypeRapport AND RefEntreprise=:RefEntreprise");
+        $requete->bindValue(':RefTypeRapport', $rapport, \PDO::PARAM_INT);
+        $requete->bindValue(':RefEntreprise', $entreprise, \PDO::PARAM_INT);
+        $requete->execute();
+        $lesChmod = $requete->fetch();
+        return $lesChmod['RefEntreprise'];
+    }
+
+
+    public function addChmod()
+    {
+        $requeteDelete = $this->dao->prepare('DELETE FROM chmodrapports WHERE RefTypeRapport=:RefTypeRapport');
+        $requeteDelete->bindValue(':RefTypeRapport', $_POST['RefTypeRapport'], \PDO::PARAM_INT);
+        $requeteDelete->execute();
+        if (!empty($_POST['RefEntreprise'])) {
+            foreach ($_POST['RefEntreprise'] as $key => $value) {
+                $requeteInsert = $this->dao->prepare('INSERT INTO chmodrapports(RefTypeRapport,RefEntreprise) VALUES(:RefTypeRapport,:RefEntreprise)');
+                $requeteInsert->bindValue(':RefTypeRapport', $_POST['RefTypeRapport'], \PDO::PARAM_INT);
+                $requeteInsert->bindValue(':RefEntreprise', $value, \PDO::PARAM_INT);
+                $requeteInsert->execute();
+            }
+        }
+    }
+
+    public function getEntrepriseRapport($rapport)
+    {
+        $requete = $this->dao->prepare("SELECT * FROM tblrapports INNER JOIN tblentreprise ON tblrapports.RefEntreprise = tblentreprise.RefEntreprise INNER JOIN tblmois ON tblmois.RefMois=tblrapports.RefMois INNER JOIN tbltyperapport ON tbltyperapport.RefTypeRapport=tblrapports.RefTypeRapport  WHERE tblrapports.RefEntreprise=:RefEntreprise AND tblrapports.RefTypeRapport=:RefTypeRapport");
+        $requete->bindValue(':RefEntreprise', $_SESSION['RefEntreprise'], \PDO::PARAM_INT);
+        $requete->bindValue(':RefTypeRapport', $rapport, \PDO::PARAM_INT);
+        $requete->execute();
+        $lesEntreprises = $requete->fetchAll();
+        return $lesEntreprises;
     }
 }

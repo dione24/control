@@ -11,6 +11,8 @@
     <route url="/rapports/config" module="Administrer" action="rapports"/>
     <route url="/rapports/config/view/([0-9]+)" module="Administrer" vars="id" action="configview"/>
 
+    <route url="/rapports/view/([0-9]+)" module="Administrer" vars="id" action="view"/>
+
     <route url="/rapports/kpi" module="Administrer" action="pannel"/>
 
     <route url="/Logout" module="Connexion" action="logout"/>
@@ -22,7 +24,7 @@
     <route url="/CheckPassword" module="Connexion" action="CheckPassword"/>
     <route url="/NewPassword" module="Connexion" action="NewPassword"/>
     <route url="/ValidPassword" module="Connexion" action="ValidPassword"/>
-    <route url="/Pannel" module="Connexion" action="Pannel"/>
+    <route url="/users/index" module="Connexion" action="Pannel"/>
     <route url="/addUsers" module="Connexion" action="addUsers"/>
     <route url="/deleteUsers/([0-9]+)" module="Connexion" vars="id" action="deleteusers"/>
     <route url="/editUsers/([0-9]+)" module="Connexion" vars="id" action="editUsers"/>

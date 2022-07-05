@@ -13,10 +13,13 @@ class ConnexionController extends \Library\BackController
             $User = $this->managers->getManagerOf('Users')->login($request->postData('login'), $request->postData('password'));
             if (!empty($User)) {
                 $this->app()->user()->setAuthenticated();
-                $_SESSION['id'] = $User['id'];
+                $_SESSION['RefUsers'] = $User['RefUsers'];
                 $_SESSION['login'] = $User['login'];
-                $_SESSION['Nom'] = $User['Nom'];
-                $_SESSION['Prenom'] = $User['Prenom'];
+                $_SESSION['Nom'] = $User['nom'];
+                $_SESSION['Prenom'] = $User['prenom'];
+                $_SESSION['Email'] = $User['email'];
+                $_SESSION['Statut'] = $User['status'];
+                $_SESSION['RefEntreprise'] = $User['RefEntreprise'];
                 $this->app()->httpResponse()->redirect('/');
             }
         }
@@ -48,19 +51,18 @@ class ConnexionController extends \Library\BackController
     public function executePannel(\Library\HTTPRequest $request)
     {
         $this->page->addVar("titles", "Liste des Utilisateurs");
-        $ListeUsers =  $this->managers->getManagerOf('Users')->getListeOf();
-        $this->page->addVar("ListeUsers", $ListeUsers);
-        $Statut =  $this->managers->getManagerOf('Users')->Statut();
-        $this->page->addVar("Statut", $Statut);
+        $users =  $this->managers->getManagerOf('Users')->getListeOf();
+        $this->page->addVar("users", $users);
+        $entreprises = $this->managers->getManagerOf("Administrer")->getEntreprise();
+        $this->page->addVar("entreprises", $entreprises);
+
+        if ($request->method() == 'POST' && !empty($_POST['login'])) {
+            $this->managers->getManagerOf("Users")->AddUsers($request);
+            $this->app()->httpResponse()->redirect('/users/index');
+        }
     }
 
 
-    public function executeAddUsers(\Library\HTTPRequest $request)
-    {
-        $this->page->addVar("titles", "Ajouter un Utilisateur");
-        $add =  $this->managers->getManagerOf('Users')->add($request);
-        $this->app()->httpResponse()->redirect("/Pannel");
-    }
 
     public function executeDeleteUsers(\Library\HTTPRequest $request)
     {
