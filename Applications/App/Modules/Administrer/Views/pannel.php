@@ -39,7 +39,7 @@
                                          </td>
                                          <td class="nk-tb-col nk-tb-col-tools">
                                              <a href="/rapports/ajouter/<?= $rapport['RefTypeRapport']; ?>"
-                                                 class="btn btn-success"><i class="fas fa-edit"> </i></a>
+                                                 class="btn btn-success"><i class="fas fa-plus-circle"> </i></a>
                                              <a href="/rapports/view/<?= $rapport['RefTypeRapport']; ?>"
                                                  class="btn btn-primary"><i class="fas fa-eye"> </i></a>
                                          </td>

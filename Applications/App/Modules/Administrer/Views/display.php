@@ -5,14 +5,15 @@
                  <div class="card card-bordered">
                      <div class="card-inner">
                          <div class="card-head">
-                             <h5 class="card-title">KPI | <?= $rapport['nomRapport']; ?></h5>
+                             <h5 class="card-title">KPI | <?= $name['nomRapport']; ?></h5>
                          </div>
                          <form method="POST">
-                             <input type="hidden" name="RefTypeRapport" value="<?= $rapport['RefTypeRapport']; ?>" />
+                             <input type="hidden" name="RefRapport" value="<?= $name['RefRapport']; ?>" />
+                             <input type="hidden" name="RefTypeRapport" value="<?= $name['RefTypeRapport']; ?>" />
                              <div class="row g-4">
 
                                  <?php if ($_SESSION['Statut'] == 'user') { ?>
-                                 <input type="hidden" name="RefEntreprise" value="<?= $_SESSION['RefEntreprise']; ?>" />
+                                 <input type="hidden" name="RefEntreprise" value="<?= $name['RefEntreprise']; ?>" />
                                  <?php } else { ?>
                                  <div class="col-lg-2">
                                      <div class="form-group">
@@ -21,7 +22,9 @@
 
                                              <select class="form-control" id="full-name-1" name="RefEntreprise">
                                                  <?php foreach ($entreprises as $entreprise) { ?>
-                                                 <option value="<?= $entreprise['RefEntreprise']; ?>">
+                                                 <option value="<?= $entreprise['RefEntreprise']; ?>"
+                                                     <?php if ($name['RefEntreprise'] == $entreprise['RefEntreprise']) { ?>
+                                                     selected <?php } ?>>
                                                      <?= $entreprise['nomEntreprise']; ?></option>
 
                                                  </option>
@@ -36,13 +39,14 @@
                                          <label class="form-label" for="full-name-1">Mois</label>
                                          <div class="form-control-wrap">
                                              <select class="form-control" id="full-name-1" name="RefMois">
-                                                 <?php foreach ($mois as $month) {
-                                                        if ($verif['RefMois'] != $month['RefMois']) {
-                                                    ?>
-                                                 <option value="<?= $month['RefMois']; ?>"><?= $month['Mois']; ?>
+                                                 <?php foreach ($mois as $month) { ?>
+                                                 <option value="<?= $month['RefMois']; ?>"
+                                                     <?php if ($name['RefMois'] == $month['RefMois']) { ?> selected
+                                                     <?php } ?>>
+
+                                                     <?= $month['Mois']; ?>
                                                  </option>
-                                                 <?php }
-                                                    } ?>
+                                                 <?php } ?>
                                              </select>
                                          </div>
                                      </div>
@@ -52,7 +56,8 @@
                                      <div class="form-group">
                                          <label class="form-label" for="full-name-1">Annee</label>
                                          <div class="form-control-wrap">
-                                             <input type="text" class="form-control" id="full-name-1" name="annee">
+                                             <input type="text" class="form-control" id="full-name-1" name="annee"
+                                                 value="<?= $name['annee']; ?>">
                                          </div>
                                      </div>
                                  </div>
@@ -77,7 +82,8 @@
                                          <label class="form-label" for="email-address-1">Mois en Cours</label>
                                          <div class="form-control-wrap">
                                              <input type="text" class="form-control" id="email-address-1" multiple
-                                                 name="moisencours[]">
+                                                 name="moisencours[]"
+                                                 value="<?= $element['content']['moisencours']; ?>">
                                          </div>
                                      </div>
                                  </div>
@@ -86,37 +92,42 @@
                                          <label class="form-label" for="phone-no-1">Mois N-1</label>
                                          <div class="form-control-wrap">
                                              <input type="text" class="form-control" id="phone-no-1" multiple
-                                                 name="moisn1[]">
+                                                 name="moisn1[]" value="<?= $element['content']['moisn1']; ?>">
                                          </div>
                                      </div>
                                  </div>
-                                 <div class="col-lg-2">
+                                 <div class=" col-lg-2">
                                      <div class="form-group">
                                          <label class="form-label" for="phone-no-1">Mois Precedent</label>
                                          <div class="form-control-wrap">
                                              <input type="text" class="form-control" id="phone-no-1" multiple
-                                                 name="moisprecedent[]">
+                                                 name="moisprecedent[]"
+                                                 value="<?= $element['content']['moisprecedent']; ?>">
                                          </div>
                                      </div>
                                  </div>
 
-                                 <div class="col-lg-2">
+                                 <div class=" col-lg-2">
                                      <div class="form-group">
                                          <label class="form-label" for="phone-no-1">Prévisions</label>
                                          <div class="form-control-wrap">
                                              <input type="text" class="form-control" id="phone-no-1" multiple
-                                                 name="previsions[]">
+                                                 name="previsions[]" value="<?= $element['content']['previsions']; ?>">
                                          </div>
                                      </div>
                                  </div>
                              </div>
                              </br></br>
                              <?php } ?>
-                             <div class="col-12">
+
+                             <?php if ($_SESSION['Statut'] == 'user') { ?>
+                             <div class=" col-12">
                                  <div class="form-group">
-                                     <button type="submit" class="btn btn-lg btn-primary">Envoyer</button>
+                                     <button type="submit" class="btn btn-lg btn-primary"
+                                         <?php if ($name['status'] == 2) { ?> disabled <?php } ?>>Modifier</button>
                                  </div>
                              </div>
+                             <?php } ?>
                          </form>
                      </div>
                  </div>

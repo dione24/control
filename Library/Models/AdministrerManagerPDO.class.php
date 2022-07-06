@@ -148,4 +148,83 @@ class AdministrerManagerPDO extends \Library\Models\AdministrerManager
         $lesEntreprises = $requete->fetchAll();
         return $lesEntreprises;
     }
+
+
+    public function getRapportName($rapport)
+    {
+        $requete = $this->dao->prepare("SELECT * FROM tblrapports INNER JOIN tbltyperapport ON tbltyperapport.RefTypeRapport=tblrapports.RefTypeRapport WHERE tblrapports.RefRapport=:RefRapport");
+        $requete->bindValue(':RefRapport', $rapport, \PDO::PARAM_INT);
+        $requete->execute();
+        $lesRapports = $requete->fetch();
+        return $lesRapports;
+    }
+
+    public function getValeur($element, $rapport)
+    {
+        $requete = $this->dao->prepare("SELECT * FROM rapportscontent WHERE RefRapportElements=:RefRapportElements AND RefRapport=:RefRapport");
+        $requete->bindValue(':RefRapportElements', $element, \PDO::PARAM_INT);
+        $requete->bindValue(':RefRapport', $rapport, \PDO::PARAM_INT);
+        $requete->execute();
+        $lesRapports = $requete->fetch();
+        return $lesRapports;
+    }
+
+
+
+    public function updateRapport()
+    {
+
+        $query = $this->dao->prepare("UPDATE tblrapports SET RefTypeRapport=:RefTypeRapport,RefEntreprise=:RefEntreprise,RefMois=:RefMois,annee=:annee WHERE RefRapport=:RefRapport");
+        $query->bindValue(':RefTypeRapport', $_POST['RefTypeRapport'], \PDO::PARAM_INT);
+        $query->bindValue(':RefEntreprise', $_POST['RefEntreprise'], \PDO::PARAM_INT);
+        $query->bindValue(':RefMois', $_POST['RefMois'], \PDO::PARAM_INT);
+        $query->bindValue(':annee', $_POST['annee'], \PDO::PARAM_INT);
+        $query->bindValue(':RefRapport', $_POST['RefRapport'], \PDO::PARAM_INT);
+        $query->execute();
+
+        foreach ($_POST['RefRapportElements'] as $key => $value) {
+            $request = $this->dao->prepare("UPDATE rapportscontent SET moisencours=:moisencours,moisn1=:moisn1,moisprecedent=:moisprecedent,previsions=:previsions WHERE RefRapportElements=:RefRapportElements AND RefRapport=:RefRapport");
+            $request->bindValue(':RefRapport', $_POST['RefRapport'], \PDO::PARAM_INT);
+            $request->bindValue(':moisencours', $_POST['moisencours'][$key], \PDO::PARAM_STR);
+            $request->bindValue(':moisn1', $_POST['moisn1'][$key], \PDO::PARAM_STR);
+            $request->bindValue(':moisprecedent', $_POST['moisprecedent'][$key], \PDO::PARAM_STR);
+            $request->bindValue(':previsions', $_POST['previsions'][$key], \PDO::PARAM_STR);
+            $request->bindValue(':RefRapportElements', $value, \PDO::PARAM_INT);
+            $request->execute();
+        }
+    }
+
+
+    public function verifRapport($id)
+    {
+        $requete = $this->dao->prepare("SELECT * FROM tblrapports WHERE RefTypeRapport=:RefTypeRapport AND RefEntreprise=:RefEntreprise ");
+        $requete->bindValue(':RefTypeRapport', $id, \PDO::PARAM_INT);
+        $requete->bindValue(':RefEntreprise', $_SESSION['RefEntreprise'], \PDO::PARAM_INT);
+        $requete->execute();
+        $lesRapports = $requete->fetch();
+        return $lesRapports;
+    }
+
+    public function deleteRapport($id)
+    {
+        $requete = $this->dao->prepare("DELETE FROM tblrapports WHERE RefRapport=:RefRapport");
+        $requete->bindValue(':RefRapport', $id, \PDO::PARAM_INT);
+        $requete->execute();
+    }
+
+    public function getFullRapport()
+    {
+        $requete = $this->dao->prepare("SELECT * FROM tblrapports INNER JOIN tblentreprise ON tblrapports.RefEntreprise = tblentreprise.RefEntreprise INNER JOIN tblmois ON tblmois.RefMois=tblrapports.RefMois INNER JOIN tbltyperapport ON tbltyperapport.RefTypeRapport=tblrapports.RefTypeRapport  ");
+        $requete->execute();
+        $lesEntreprises = $requete->fetchAll();
+        return $lesEntreprises;
+    }
+
+    public function updateStatut($statut, $rapport)
+    {
+        $requete = $this->dao->prepare("UPDATE tblrapports SET status=:Statut WHERE RefRapport=:RefRapport");
+        $requete->bindValue(':Statut', $statut, \PDO::PARAM_STR);
+        $requete->bindValue(':RefRapport', $rapport, \PDO::PARAM_INT);
+        $requete->execute();
+    }
 }

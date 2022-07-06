@@ -6,91 +6,65 @@ namespace Library\Models;
 
 class AfficherManagerPDO extends \Library\Models\AfficherManager
 {
-    public function ListeClient()
+    public function rapports($type)
     {
-        $requete = $this->dao->prepare(" SELECT * FROM clients");
+        $requete = $this->dao->prepare(" SELECT * FROM tblrapports WHERE RefTypeRapport=:type");
+        $requete->bindValue(':type', $type);
         $requete->execute();
         $results = $requete->fetchAll();
         return $results;
     }
-    public function getClient($id)
+
+    public function getKpis()
     {
-        $requete = $this->dao->prepare("SELECT * FROM clients WHERE id=:id");
-        $requete->bindValue(':id', $id, \PDO::PARAM_INT);
+        $requete = $this->dao->prepare(" SELECT * FROM tbltyperapport INNER JOIN tblrapports ON tbltyperapport.RefTypeRapport = tblrapports.RefTypeRapport");
+        $requete->execute();
+        $results = $requete->fetchAll();
+        return $results;
+    }
+
+    public function getMoisEncours($rapport, $mois, $annee)
+    {
+        $requete = $this->dao->prepare(" SELECT SUM(moisencours) AS SOLDE FROM rapportscontent INNER JOIN tblrapports ON tblrapports.RefRapport=rapportscontent.RefRapport INNER JOIN tbltyperapport ON tbltyperapport.RefTypeRapport=tblrapports.RefTypeRapport WHERE tblrapports.RefTypeRapport= :rapport AND tblrapports.RefMois= :mois AND tblrapports.Annee= :annee");
+        $requete->bindValue(':rapport', $rapport);
+        $requete->bindValue(':mois', $mois);
+        $requete->bindValue(':annee', $annee);
         $requete->execute();
         $results = $requete->fetch();
-        return $results;
+        return $results['SOLDE'];
     }
 
-    public function updateClient()
-    {
-        $requete = $this->dao->prepare("UPDATE clients SET nom=:nom,prenom=:prenom,telephone=:telephone,adresse=:adresse,email=:email WHERE id=:id");
-        $requete->bindValue(':id', $_POST['id'], \PDO::PARAM_STR);
-        $requete->bindValue(':nom', $_POST['nom'], \PDO::PARAM_STR);
-        $requete->bindValue(':prenom', $_POST['prenom'], \PDO::PARAM_STR);
-        $requete->bindValue(':telephone', $_POST['telephone'], \PDO::PARAM_STR);
-        $requete->bindValue(':adresse', $_POST['adresse'], \PDO::PARAM_STR);
-        $requete->bindValue(':email', $_POST['email'], \PDO::PARAM_STR);
 
-        $requete->execute();
-    }
-
-    public function deleteClient($id)
+    public function moisn1($rapport, $mois, $annee)
     {
-        $requete = $this->dao->prepare(" DELETE  FROM clients WHERE id=:id");
-        $requete->bindValue(':id', $id, \PDO::PARAM_INT);
-        $requete->execute();
-    }
-
-    public function ListeService()
-    {
-        $requete = $this->dao->prepare(" SELECT * FROM services ");
-        $requete->execute();
-        $results = $requete->fetchAll();
-        return $results;
-    }
-
-    public function getService($id)
-    {
-        $requete = $this->dao->prepare(" SELECT * FROM espaces WHERE id_espaces=:id_espaces");
-        $requete->bindValue(':id_espaces', $id, \PDO::PARAM_INT);
+        $requete = $this->dao->prepare(" SELECT SUM(moisn1) AS SOLDE FROM rapportscontent INNER JOIN tblrapports ON tblrapports.RefRapport=rapportscontent.RefRapport INNER JOIN tbltyperapport ON tbltyperapport.RefTypeRapport=tblrapports.RefTypeRapport WHERE tblrapports.RefTypeRapport= :rapport AND tblrapports.RefMois= :mois AND tblrapports.Annee= :annee");
+        $requete->bindValue(':rapport', $rapport);
+        $requete->bindValue(':mois', $mois);
+        $requete->bindValue(':annee', $annee);
         $requete->execute();
         $results = $requete->fetch();
-        return $results;
+        return $results['SOLDE'];
     }
 
-    public function updateService()
+    public function moisprecedent($rapport, $mois, $annee)
     {
-        $requete = $this->dao->prepare("UPDATE espaces SET numero=:numero,id_type=:id_type,superficie=:superficie,position=:position,bloc=:bloc WHERE id_espaces=:id_espaces ");
-        $requete->bindValue(':id_espaces', $_POST['id_espaces'], \PDO::PARAM_INT);
-        $requete->bindValue(':numero', $_POST['numero'], \PDO::PARAM_INT);
-        $requete->bindValue(':id_type', $_POST['id_type'], \PDO::PARAM_INT);
-        $requete->bindValue(':superficie', $_POST['superficie'], \PDO::PARAM_STR);
-        $requete->bindValue(':position', $_POST['position'], \PDO::PARAM_STR);
-        $requete->bindValue(':bloc', $_POST['bloc'], \PDO::PARAM_STR);
+        $requete = $this->dao->prepare(" SELECT SUM(moisprecedent) AS SOLDE FROM rapportscontent INNER JOIN tblrapports ON tblrapports.RefRapport=rapportscontent.RefRapport INNER JOIN tbltyperapport ON tbltyperapport.RefTypeRapport=tblrapports.RefTypeRapport WHERE tblrapports.RefTypeRapport= :rapport AND tblrapports.RefMois= :mois AND tblrapports.Annee= :annee");
+        $requete->bindValue(':rapport', $rapport);
+        $requete->bindValue(':mois', $mois);
+        $requete->bindValue(':annee', $annee);
         $requete->execute();
+        $results = $requete->fetch();
+        return $results['SOLDE'];
     }
 
-    public function deleteService($id)
+    public function getPrevisions($rapport, $mois, $annee)
     {
-        $requete = $this->dao->prepare(" DELETE  FROM espaces WHERE id_espaces=:id");
-        $requete->bindValue(':id', $id, \PDO::PARAM_INT);
+        $requete = $this->dao->prepare(" SELECT SUM(previsions) AS SOLDE FROM rapportscontent INNER JOIN tblrapports ON tblrapports.RefRapport=rapportscontent.RefRapport INNER JOIN tbltyperapport ON tbltyperapport.RefTypeRapport=tblrapports.RefTypeRapport WHERE tblrapports.RefTypeRapport= :rapport AND tblrapports.RefMois= :mois AND tblrapports.Annee= :annee");
+        $requete->bindValue(':rapport', $rapport);
+        $requete->bindValue(':mois', $mois);
+        $requete->bindValue(':annee', $annee);
         $requete->execute();
-    }
-
-    public function ListeAb()
-    {
-        $requete = $this->dao->prepare(" SELECT * FROM abonnements INNER JOIN clients ON abonnements.RefClient=clients.id INNER JOIN services ON abonnements.RefService=services.RefServices WHERE abonnements.statut=0");
-        $requete->execute();
-        $results = $requete->fetchAll();
-        return $results;
-    }
-
-
-    public function disable($id)
-    {
-        $requete = $this->dao->prepare(" UPDATE abonnements SET statut=1 WHERE RefAb=:id");
-        $requete->bindValue(':id', $id, \PDO::PARAM_INT);
-        $requete->execute();
+        $results = $requete->fetch();
+        return $results['SOLDE'];
     }
 }

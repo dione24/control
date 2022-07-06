@@ -53,37 +53,30 @@
 
                                 <li class="nk-menu-item">
                                     <a href="/rapports/kpi" class="nk-menu-link">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-building"></em></span>
+                                        <span class="nk-menu-icon"><em class="icon ni ni-growth"></em></span>
                                         <span class="nk-menu-text">KPI</span><span class="nk-menu-badge">NEW</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
+
+
+                                <li class="nk-menu-item">
+                                    <a href="/rapports/kpi" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-growth-fill"></em></span>
+                                        <span class="nk-menu-text">AI Analytics</span><span class="nk-menu-badge">Coming
+                                            Soon</span>
+                                    </a>
+                                </li>
+                                <?php if ($_SESSION['Statut'] != 'user') { ?>
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">Dashboards</h6>
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">
-                                    <a href="html/index.html" class="nk-menu-link">
+                                    <a href="/rapports/control/index" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-dashlite"></em></span>
-                                        <span class="nk-menu-text">KPI Financier</span>
+                                        <span class="nk-menu-text">Dashboard</span>
                                     </a>
-                                </li><!-- .nk-menu-item -->
-                                <li class="nk-menu-item">
-                                    <a href="html/index-crypto.html" class="nk-menu-link">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-bitcoin-cash"></em></span>
-                                        <span class="nk-menu-text">KPI Marketing/Commercial</span>
-                                    </a>
-                                </li><!-- .nk-menu-item -->
-                                <li class="nk-menu-item">
-                                    <a href="html/index-analytics.html" class="nk-menu-link">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-growth"></em></span>
-                                        <span class="nk-menu-text">KPI Ressources Humaines</span>
-                                    </a>
-                                </li><!-- .nk-menu-item -->
-                                <li class="nk-menu-item">
-                                    <a href="html/index-invest.html" class="nk-menu-link">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-coins"></em></span>
-                                        <span class="nk-menu-text">KPI Operations</span>
-                                    </a>
-                                </li><!-- .nk-menu-item -->
+                                </li>
+                                <?php } ?>
                                 <?php if ($_SESSION['Statut'] != 'user') { ?>
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">Paramètres</h6>

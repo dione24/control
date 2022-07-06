@@ -12,8 +12,13 @@
     <route url="/rapports/config/view/([0-9]+)" module="Administrer" vars="id" action="configview"/>
 
     <route url="/rapports/view/([0-9]+)" module="Administrer" vars="id" action="view"/>
+    <route url="/rapports/view/display/([0-9]+)" module="Administrer" vars="id" action="display"/>
 
+    <route url="/rapports/view/delete/([0-9]+)" module="Administrer" vars="id" action="delete"/>
+
+    <route url="/rapports/update/statut/([0-9]+)/([0-9]+)" module="Administrer" vars="statut,rapport" action="statut"/>
     <route url="/rapports/kpi" module="Administrer" action="pannel"/>
+    <route url="/rapports/control/index" module="Afficher" action="control"/>
 
     <route url="/Logout" module="Connexion" action="logout"/>
 

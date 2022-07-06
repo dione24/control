@@ -12,6 +12,7 @@
                                  <table class="datatable-init nowrap table">
                                      <thead>
                                          <tr>
+                                             <th>Entreprise</th>
                                              <th>Rapport</th>
                                              <th>Mois</th>
                                              <th>Année</th>
@@ -22,27 +23,27 @@
                                      <tbody>
                                          <?php foreach ($rapports as $rapport) { ?>
                                          <tr>
+                                             <td><?= $rapport['nomEntreprise']; ?></td>
                                              <td><?= $rapport['nomRapport']; ?></td>
                                              <td><?= $rapport['Mois']; ?></td>
                                              <td><?= $rapport['annee']; ?></td>
                                              <td><?php if ($rapport['status'] == 1) { ?>
-                                                 <span class="badge bg-warning">En attente</span> <?php } else { ?>
-                                                 <span class="badge bg-success">Validé</span>
+                                                 <a href="/rapports/update/statut/2/<?= $rapport['RefRapport']; ?>"><span
+                                                         class="badge bg-warning">En
+                                                         attente</span></a> <?php } else { ?>
+                                                 <a href="/rapports/update/statut/1/<?= $rapport['RefRapport']; ?>""> <span
+                                                         class=" badge bg-success">Validé</span></a>
                                                  <?php } ?>
                                              </td>
 
                                              <td class="td-actions">
                                                  <a href="/rapports/view/display/<?= $rapport['RefRapport']; ?>"
                                                      class="btn btn-primary"><i class="fas fa-eye"> </i></a>
-
-                                                 <?php if ($rapport['status'] == 1) { ?>
                                                  <a href="/rapports/view/delete/<?= $rapport['RefRapport']; ?>"
                                                      class="btn btn-danger "
                                                      onclick="return confirm('Voulez-vous vraiment supprimer cet élément ?');"><i
                                                          class="fas fa-trash-alt"> </i></a>
-                                                 <?php } ?>
                                              </td>
-
 
                                          </tr>
                                          <?php } ?>
