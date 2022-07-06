@@ -14,32 +14,39 @@
                              <a href="#" class="btn btn-icon btn-trigger toggle-expand me-n1" data-target="pageMenu"><em
                                      class="icon ni ni-more-v"></em></a>
                              <?php if ($_SESSION['Statut'] != 'user') { ?>
-                             <div class="toggle-expand-content" data-content="pageMenu">
-                                 <ul class="nk-block-tools g-3">
-                                     <li>
-                                         <div class="dropdown">
-                                             <a href="#" class="dropdown-toggle btn btn-white btn-dim btn-outline-light"
-                                                 data-bs-toggle="dropdown"><em
-                                                     class="d-none d-sm-inline icon ni ni-growth"></em><span><span
-                                                         class="d-none d-md-inline">POOL</span></span><em
-                                                     class="dd-indc icon ni ni-chevron-right"></em></a>
-                                             <div class="dropdown-menu dropdown-menu-end">
-                                                 <ul class="link-list-opt no-bdr">
-                                                     <?php foreach ($poles as $key => $pole) { ?>
-                                                     <li><a
-                                                             href="/home/pool/<?= $pole['RefPole']; ?>"><span><?= $pole['nomPole']; ?></span></a>
-                                                     </li>
-                                                     <?php } ?>
-
-                                                 </ul>
+                             <form method="POST">
+                                 <div class="toggle-expand-content" data-content="pageMenu">
+                                     <ul class="nk-block-tools g-3">
+                                         <li>
+                                             <div class="dropdown">
+                                                 <select class="form-control" name="RefPole">
+                                                     <option">Pole</option>
+                                                         <?php foreach ($poles as $pole) { ?>
+                                                         <option value="<?= $pole['RefPole']; ?>">
+                                                             <?= $pole['nomPole']; ?></option>
+                                                         <?php } ?>
+                                                 </select>
                                              </div>
-                                         </div>
-                                     </li>
-                                     <li class="nk-block-tools-opt"><a href="#" class="btn btn-primary"><em
-                                                 class="icon ni ni-reports"></em><span>Reports</span></a>
-                                     </li>
-                                 </ul>
-                             </div>
+                                         </li>
+                                         <li>
+                                             <div class="dropdown">
+                                                 <select class="form-control" name="RefEntreprise">
+                                                     <option>Entreprise</option>
+                                                     <?php foreach ($entreprises as $key => $entreprise) { ?>
+                                                     <option value="<?= $entreprise['RefEntreprise']; ?>">
+                                                         <?= $entreprise['nomEntreprise']; ?></option>
+                                                     <?php } ?>
+                                                 </select>
+                                             </div>
+                                         </li>
+                                         <li class="nk-block-tools-opt"><button type="submit"
+                                                 class="btn btn-primary"><em
+                                                     class="icon ni ni-search"></em><span></span></button>
+                                         </li>
+
+                                     </ul>
+                                 </div>
+                             </form>
                              <?php } ?>
                          </div>
                      </div><!-- .nk-block-head-content -->
@@ -223,16 +230,16 @@
                                              <span class="tb-lead"><?= $kpi['nomRapport']; ?></span>
                                          </div>
                                          <div class="nk-tb-col">
-                                             <span class="tb-lead"><?= $moisencours; ?></span>
+                                             <span class="tb-lead"><?= $kpi['moisencours']; ?></span>
                                          </div>
                                          <div class="nk-tb-col tb-col-md">
-                                             <span class="tb-lead"><?= $moisn1; ?></span>
+                                             <span class="tb-lead"><?= $kpi['moisn1']; ?></span>
                                          </div>
                                          <div class="nk-tb-col tb-col-lg">
-                                             <span class="tb-lead "><?= $moisprecedent; ?></span>
+                                             <span class="tb-lead "><?= $kpi['moisprecedent']; ?></span>
                                          </div>
                                          <div class="nk-tb-col">
-                                             <span class="tb-lead "><?= $previsions; ?></span>
+                                             <span class="tb-lead "><?= $kpi['previsions']; ?></span>
                                          </div>
 
                                      </div>

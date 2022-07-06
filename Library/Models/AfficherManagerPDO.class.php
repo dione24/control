@@ -15,11 +15,17 @@ class AfficherManagerPDO extends \Library\Models\AfficherManager
         return $results;
     }
 
-    public function getKpis()
+    public function getKpis($mois, $annee)
     {
         $requete = $this->dao->prepare(" SELECT * FROM tbltyperapport INNER JOIN tblrapports ON tbltyperapport.RefTypeRapport = tblrapports.RefTypeRapport");
         $requete->execute();
         $results = $requete->fetchAll();
+        foreach ($results as $key => $value) {
+            $results[$key]['moisencours'] = $this->getMoisEncours($value['RefRapport'], $mois, $annee);
+            $results[$key]['moisn1'] = $this->moisn1($value['RefRapport'], $mois, $annee);
+            $results[$key]['moisprecedent'] = $this->moisprecedent($value['RefRapport'], $mois, $annee);
+            $results[$key]['previsions'] = $this->getPrevisions($value['RefRapport'], $mois, $annee);
+        }
         return $results;
     }
 

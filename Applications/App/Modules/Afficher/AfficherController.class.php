@@ -10,16 +10,20 @@ class AfficherController extends \Library\BackController
 
         $poles = $this->managers->getManagerOf("Administrer")->getPoles();
         $this->page->addVar("poles", $poles);
-        $kpis = $this->managers->getManagerOf("Afficher")->getKpis();
-        $moisencours = 0;
-        $moisn1 = 0;
-        $moisprecedent = 0;
-        $previsions =  0;
 
-        $this->page->addVar("moisencours", $moisencours);
-        $this->page->addVar("moisn1", $moisn1);
-        $this->page->addVar("moisprecedent", $moisprecedent);
-        $this->page->addVar("previsions", $previsions);
+        $entreprises = $this->managers->getManagerOf("Administrer")->getEntreprise();
+        $this->page->addVar("entreprises", $entreprises);
+
+        if ($request->method() == "POST") {
+
+            $month = $request->postData("month");
+            $year = $request->postData("year");
+            $pole = $request->postData("RefPole");
+            $entreprise = $request->postData("RefEntreprise");
+            $kpis = $this->managers->getManagerOf("Afficher")->getKpis();
+        } else {
+            $kpis = $this->managers->getManagerOf("Afficher")->getKpis(1, 2022);
+        }
 
         $this->page->addVar("kpis", $kpis);
     }
