@@ -63,7 +63,7 @@
 
 
                                 <li class="nk-menu-item">
-                                    <a href="/rapports/kpi" class="nk-menu-link">
+                                    <a href="#" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-growth-fill"></em></span>
                                         <span class="nk-menu-text">AI Analytics</span><span class="nk-menu-badge">Coming
                                             Soon</span>
@@ -187,8 +187,7 @@
                                             </div>
                                             <div class="dropdown-inner">
                                                 <ul class="link-list">
-                                                    <li><a href="/user/profile"><em
-                                                                class="icon ni ni-user-alt"></em><span>
+                                                    <li><a href="#"><em class="icon ni ni-user-alt"></em><span>
                                                                 Profile</span></a></li>
 
                                                     <li><a class="dark-switch" href="#"><em
@@ -263,7 +262,6 @@
                                             data-bs-toggle="dropdown" data-offset="0,10"><span>Français</span></a>
 
                                     </li>
-
                                 </ul>
                             </div>
                         </div>
