@@ -15,62 +15,134 @@ class AfficherManagerPDO extends \Library\Models\AfficherManager
         return $results;
     }
 
-    public function getKpis($mois, $annee)
+    public function getKpis($mois, $annee, $pole, $entreprise)
     {
-        $requete = $this->dao->prepare(" SELECT * FROM tbltyperapport INNER JOIN tblrapports ON tbltyperapport.RefTypeRapport = tblrapports.RefTypeRapport");
-        $requete->execute();
-        $results = $requete->fetchAll();
-        foreach ($results as $key => $value) {
-            $results[$key]['moisencours'] = $this->getMoisEncours($value['RefRapport'], $mois, $annee);
-            $results[$key]['moisn1'] = $this->moisn1($value['RefRapport'], $mois, $annee);
-            $results[$key]['moisprecedent'] = $this->moisprecedent($value['RefRapport'], $mois, $annee);
-            $results[$key]['previsions'] = $this->getPrevisions($value['RefRapport'], $mois, $annee);
+        $requete = "SELECT  dashboard.*,SUM(moisencours) AS Smoisencours,SUM(moisn1) AS Smoisn1,SUM(moisprecedent) AS Smoisprecedent,SUM(previsions) AS Sprevisions FROM dashboard";
+        if (!empty($mois) or !empty($annee) or !empty($pole) or !empty($entreprise)) {
+            $requete .= " WHERE";
         }
+        if (!empty($annee)) {
+            $requete .= " annee=$annee";
+        }
+        if (!empty($mois) && !empty($annee)) {
+            if (!empty($annee)) {
+                $requete .= " AND";
+            }
+            $requete .= " RefMois=$mois";
+        }
+        if (!empty($annee) && !empty($pole) && empty($entreprise)) {
+
+            $requete .= " AND RefPole=$pole";
+        }
+        if (!empty($annee) && !empty($entreprise)) {
+            $requete .= "  AND RefEntreprise=$entreprise";
+        }
+        $query = $this->dao->prepare($requete);
+        $query->execute();
+        $results = $query->fetchAll();
         return $results;
     }
 
-    public function getMoisEncours($rapport, $mois, $annee)
+    public function getChart()
     {
-        $requete = $this->dao->prepare(" SELECT SUM(moisencours) AS SOLDE FROM rapportscontent INNER JOIN tblrapports ON tblrapports.RefRapport=rapportscontent.RefRapport INNER JOIN tbltyperapport ON tbltyperapport.RefTypeRapport=tblrapports.RefTypeRapport WHERE tblrapports.RefTypeRapport= :rapport AND tblrapports.RefMois= :mois AND tblrapports.Annee= :annee");
-        $requete->bindValue(':rapport', $rapport);
-        $requete->bindValue(':mois', $mois);
-        $requete->bindValue(':annee', $annee);
+        $requete = $this->dao->prepare("SELECT * FROM tblchart INNER JOIN tblrapportelements ON tblrapportelements.RefRapportElements=tblchart.RefRapportElements WHERE RefUsers=:id");
+        $requete->bindValue(':id', $_SESSION['RefUsers']);
         $requete->execute();
-        $results = $requete->fetch();
-        return $results['SOLDE'];
+        $results = $requete->fetchAll();
+        return $results;
     }
 
 
-    public function moisn1($rapport, $mois, $annee)
+
+    public function getElementsValue($rapport)
     {
-        $requete = $this->dao->prepare(" SELECT SUM(moisn1) AS SOLDE FROM rapportscontent INNER JOIN tblrapports ON tblrapports.RefRapport=rapportscontent.RefRapport INNER JOIN tbltyperapport ON tbltyperapport.RefTypeRapport=tblrapports.RefTypeRapport WHERE tblrapports.RefTypeRapport= :rapport AND tblrapports.RefMois= :mois AND tblrapports.Annee= :annee");
+        $requete = $this->dao->prepare("SELECT * FROM dashboard WHERE RefRapport=:rapport");
         $requete->bindValue(':rapport', $rapport);
-        $requete->bindValue(':mois', $mois);
-        $requete->bindValue(':annee', $annee);
         $requete->execute();
-        $results = $requete->fetch();
-        return $results['SOLDE'];
+        $results = $requete->fetchAll();
+        return $results;
     }
 
-    public function moisprecedent($rapport, $mois, $annee)
+
+
+
+    public function getDash($mois, $annee, $pole, $entreprise)
     {
-        $requete = $this->dao->prepare(" SELECT SUM(moisprecedent) AS SOLDE FROM rapportscontent INNER JOIN tblrapports ON tblrapports.RefRapport=rapportscontent.RefRapport INNER JOIN tbltyperapport ON tbltyperapport.RefTypeRapport=tblrapports.RefTypeRapport WHERE tblrapports.RefTypeRapport= :rapport AND tblrapports.RefMois= :mois AND tblrapports.Annee= :annee");
-        $requete->bindValue(':rapport', $rapport);
-        $requete->bindValue(':mois', $mois);
-        $requete->bindValue(':annee', $annee);
-        $requete->execute();
-        $results = $requete->fetch();
-        return $results['SOLDE'];
+        $requete = "SELECT  dashboard.*,SUM(moisencours) AS Smoisencours,SUM(moisn1) AS Smoisn1,SUM(moisprecedent) AS Smoisprecedent,SUM(previsions) AS Sprevisions FROM dashboard";
+        if (!empty($mois) or !empty($annee) or !empty($pole) or !empty($entreprise)) {
+            $requete .= " WHERE";
+        }
+        if (!empty($annee)) {
+            $requete .= " annee=$annee";
+        }
+        if (!empty($mois) && !empty($annee)) {
+            if (!empty($annee)) {
+                $requete .= " AND";
+            }
+            $requete .= " RefMois=$mois";
+        }
+        if (!empty($annee) && !empty($pole) && empty($entreprise)) {
+
+            $requete .= " AND RefPole=$pole";
+        }
+        if (!empty($annee) && !empty($entreprise)) {
+            $requete .= "  AND RefEntreprise=$entreprise";
+        }
+
+        $requete .= " GROUP BY RefRapport";
+        $query = $this->dao->prepare($requete);
+        $query->execute();
+        $results = $query->fetchAll();
+        return $results;
     }
 
-    public function getPrevisions($rapport, $mois, $annee)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function getKpises($mois, $annee, $pole, $entreprise)
     {
-        $requete = $this->dao->prepare(" SELECT SUM(previsions) AS SOLDE FROM rapportscontent INNER JOIN tblrapports ON tblrapports.RefRapport=rapportscontent.RefRapport INNER JOIN tbltyperapport ON tbltyperapport.RefTypeRapport=tblrapports.RefTypeRapport WHERE tblrapports.RefTypeRapport= :rapport AND tblrapports.RefMois= :mois AND tblrapports.Annee= :annee");
-        $requete->bindValue(':rapport', $rapport);
-        $requete->bindValue(':mois', $mois);
-        $requete->bindValue(':annee', $annee);
-        $requete->execute();
-        $results = $requete->fetch();
-        return $results['SOLDE'];
+        $requete = "SELECT  dashboard.*,SUM(moisencours) AS Smoisencours,SUM(moisn1) AS Smoisn1,SUM(moisprecedent) AS Smoisprecedent,SUM(previsions) AS Sprevisions FROM dashboard";
+        if (!empty($mois) or !empty($annee) or !empty($pole) or !empty($entreprise)) {
+            $requete .= " WHERE";
+        }
+        if (!empty($annee)) {
+            $requete .= " annee=$annee";
+        }
+        if (!empty($mois) && !empty($annee)) {
+            if (!empty($annee)) {
+                $requete .= " AND";
+            }
+            $requete .= " RefMois=$mois";
+        }
+        if (!empty($annee) && !empty($pole) && empty($entreprise)) {
+
+            $requete .= " AND RefPole=$pole";
+        }
+        if (!empty($annee) && !empty($entreprise)) {
+            $requete .= "  AND RefEntreprise=$entreprise";
+        }
+        $query = $this->dao->prepare($requete);
+        $query->execute();
+        $results = $query->fetchAll();
+        return $results;
     }
 }

@@ -19,7 +19,10 @@
         integrity="sha384-Tv5i09RULyHKMwX0E8wJUqSOaXlyu3SQxORObAI08iUwIalMmN5L6AvlPX2LMoSE" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/fontawesome.css"
         integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+
 </head>
+<!--  -->
 
 <body class="nk-body bg-lighter npc-general has-sidebar ">
     <div class="nk-app-root">
@@ -279,6 +282,8 @@
     <script src="/assets/js/bundle.js?ver=3.0.0"></script>
     <script src="/assets/js/scripts.js?ver=3.0.0"></script>
     <script src="/assets/js/charts/gd-default.js?ver=3.0.0"></script>
+    <script src="/assets/js/libs/datatable-btns.js?ver=3.0.0"></script>
+    <script src="/assets/js/example-chart.js?ver=3.0.0"></script>
 </body>
 
 </html>
