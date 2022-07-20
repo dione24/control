@@ -164,10 +164,149 @@
                                  </table>
                              </div>
 
+
+
                          </div><!-- .card -->
                      </div>
                  </div><!-- .row -->
              </div><!-- .nk-block -->
+             <div class="nk-block">
+                 <div class="row g-gs">
+                     <div class="col-md-12 col-xxl-8">
+                         <div class="card card-bordered card-full">
+                             <div class="card-inner border-bottom">
+                                 <div class="card-title-group">
+                                     <div class="card-title">
+                                         <h6 class="title">Charts</h6>
+                                     </div>
+                                     <div class="card-tools">
+                                     </div>
+                                 </div>
+                             </div>
+                             <?php foreach ($dash as $key => $rapport) { ?>
+                             <div class="nk-block-des">
+                                 <h4 class=" text-center"><?= $rapport['nomRapport']; ?></h4>
+                             </div>
+                             <canvas id="myChart-<?= $rapport['RefRapport']; ?>" width="100" height="25"></canvas>
+                             <script>
+                             const ctx<?= $rapport['RefRapport']; ?> = document.getElementById(
+                                 'myChart-<?= $rapport['RefRapport']; ?>');
+                             const myChart<?= $rapport['RefRapport']; ?> = new Chart(
+                                 ctx<?= $rapport['RefRapport']; ?>, {
+                                     type: 'bar',
+                                     data: {
+                                         labels: [
+                                             <?php foreach ($rapport['elements'] as $intitule) { ?> '<?= $intitule['nomElement']; ?>',
+                                             <?php } ?>
+                                         ],
+                                         datasets: [{
+                                                 label: 'Mois en cours',
+                                                 data: [
+                                                     <?php foreach ($rapport['elements'] as $intitule) { ?>
+                                                     <?= $intitule['moisencours']; ?>,
+                                                     <?php } ?>
+                                                 ],
+                                                 backgroundColor: '#6ab7ff',
+
+                                                 borderColor: '#6ab7ff',
+                                                 borderWidth: 1
+                                             },
+
+                                             {
+                                                 label: 'Mois N-1',
+                                                 data: [
+                                                     <?php foreach ($rapport['elements'] as $intitule) { ?>
+                                                     <?= $intitule['moisn1']; ?>,
+                                                     <?php } ?>
+                                                 ],
+                                                 backgroundColor: '#df78ef',
+
+                                                 borderColor: '#df78ef',
+                                                 borderWidth: 1
+                                             }
+
+                                         ]
+                                     },
+                                     options: {
+                                         scales: {
+                                             y: {
+                                                 beginAtZero: true
+                                             }
+                                         }
+                                     }
+                                 });
+                             </script>
+                             <?php } ?>
+
+
+                         </div><!-- .card -->
+                     </div><!-- .col -->
+                 </div>
+             </div>
+             <?php foreach ($charts as $key => $chart) { ?>
+             <div class="nk-block">
+                 <div class="row g-gs">
+                     <div class="col-md-12 col-xxl-8">
+                         <div class="card card-bordered card-full">
+                             <div class="card-inner border-bottom">
+                                 <div class="card-title-group">
+                                     <div class="card-title">
+                                         <h6 class="title">Evolution</h6>
+                                     </div>
+                                     <div class="card-tools">
+                                     </div>
+                                 </div>
+                             </div>
+
+                             <h3 class="text-center"><?= $chart['nomElement']; ?></h3>
+                             <canvas id="evol-<?= $chart['RefRapportElements']; ?>" width="200" height="50"></canvas>
+                             <script>
+                             const ctx<?= $chart['RefRapportElements']; ?> = document.getElementById(
+                                 'evol-<?= $chart['RefRapportElements']; ?>');
+                             const myChart<?= $chart['RefRapportElements']; ?> = new Chart(
+                                 ctx<?= $chart['RefRapportElements']; ?>, {
+                                     type: 'line',
+                                     data: {
+                                         labels: [
+                                             'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+                                         ],
+                                         datasets: [{
+                                                 label: 'Previsions',
+                                                 data: [12, 19, 3, 5, 2, 3],
+                                                 backgroundColor: '#f05545',
+                                                 borderColor: '#f05545',
+                                                 borderWidth: 1
+                                             },
+                                             {
+                                                 label: 'Mois en cours',
+                                                 data: [30, 45, 53, 55, 12, 13],
+                                                 backgroundColor: '#005ecb',
+
+                                                 borderColor: '#005ecb',
+                                                 borderWidth: 1
+                                             }
+
+                                         ]
+                                     },
+                                     options: {
+                                         scales: {
+                                             y: {
+                                                 beginAtZero: true
+                                             }
+                                         }
+                                     }
+                                 });
+                             </script>
+
+
+
+
+                         </div><!-- .card -->
+                     </div><!-- .col -->
+                 </div>
+             </div>
+             <?php } ?>
+
          </div>
      </div>
  </div>

@@ -40,7 +40,7 @@ class AdministrerController extends \Library\BackController
 
         if ($request->method() == 'POST') {
             $this->managers->getManagerOf("Administrer")->addEntreprise($request);
-            $this->app()->httpResponse()->redirect("entreprises/index");
+            $this->app()->httpResponse()->redirect("/entreprises/index");
         }
     }
 

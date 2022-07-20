@@ -282,6 +282,12 @@
     <script src="/assets/js/charts/gd-default.js?ver=3.0.0"></script>
     <script src="/assets/js/libs/datatable-btns.js?ver=3.0.0"></script>
     <script src="/assets/js/example-chart.js?ver=3.0.0"></script>
+
+    <script>
+    $(function() {
+        $(".dial").knob();
+    });
+    </script>
 </body>
 
 </html>

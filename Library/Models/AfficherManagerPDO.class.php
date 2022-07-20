@@ -43,7 +43,7 @@ class AfficherManagerPDO extends \Library\Models\AfficherManager
         return $results;
     }
 
-    public function getChart()
+    public function UserCharts()
     {
         $requete = $this->dao->prepare("SELECT * FROM tblchart INNER JOIN tblrapportelements ON tblrapportelements.RefRapportElements=tblchart.RefRapportElements WHERE RefUsers=:id");
         $requete->bindValue(':id', $_SESSION['RefUsers']);
@@ -85,14 +85,58 @@ class AfficherManagerPDO extends \Library\Models\AfficherManager
 
             $requete .= " AND RefPole=$pole";
         }
-        if (!empty($annee) && !empty($entreprise)) {
+        if (
+            !empty($annee)
+            && !empty($entreprise)
+        ) {
             $requete .= "  AND RefEntreprise=$entreprise";
+        }
+        if ($_SESSION['Statut'] == 'user') {
+            $requete .= " AND RefEntreprise=" . $_SESSION['RefEntreprise'];
         }
 
         $requete .= " GROUP BY RefRapport";
         $query = $this->dao->prepare($requete);
         $query->execute();
         $results = $query->fetchAll();
+        return $results;
+    }
+
+
+
+    public function getCharts($mois, $annee, $pole, $entreprise)
+    {
+        $requete = "SELECT  dashboard.*,tblmois.Mois,tblmois.RefMois,SUM(moisencours) AS Smoisencours,SUM(moisn1) AS Smoisn1,SUM(moisprecedent) AS Smoisprecedent,SUM(previsions) AS Sprevisions FROM dashboard INNER JOIN tblchart ON tblchart.RefRapportElements=dashboard.RefRapportElements INNER JOIN tblmois ON tblmois.RefMois=dashboard.RefMois ";
+        if (!empty($mois) or !empty($annee) or !empty($pole) or !empty($entreprise)) {
+            $requete .= " WHERE";
+        }
+
+        if (!empty($mois) && !empty($annee)) {
+
+            $requete .= " (annee < $annee OR  (tblmois.RefMois < $mois AND annee=$annee) )";
+        }
+        if (!empty($annee) && !empty($pole) && empty($entreprise)) {
+
+            $requete .= " AND RefPole=$pole";
+        }
+        if (
+            !empty($annee)
+            && !empty($entreprise)
+        ) {
+            $requete .= "  AND RefEntreprise=$entreprise";
+        }
+        if ($_SESSION['Statut'] == 'user') {
+            $requete .= " AND RefEntreprise=" . $_SESSION['RefEntreprise'];
+        }
+        $requete .= " AND tblchart.RefUsers=" . $_SESSION['RefUsers'];
+
+
+
+        $requete .= " GROUP BY RefRapportElements ORDER BY annee,tblmois.RefMois DESC LIMIT 12 ";
+        $query = $this->dao->prepare($requete);
+        $query->execute();
+        $results = $query->fetchAll();
+        echo $requete;
         return $results;
     }
 
