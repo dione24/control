@@ -243,7 +243,6 @@
                      </div><!-- .col -->
                  </div>
              </div>
-             <?php foreach ($charts as $key => $chart) { ?>
              <div class="nk-block">
                  <div class="row g-gs">
                      <div class="col-md-12 col-xxl-8">
@@ -257,36 +256,36 @@
                                      </div>
                                  </div>
                              </div>
-
-                             <h3 class="text-center"><?= $chart['nomElement']; ?></h3>
-                             <canvas id="evol-<?= $chart['RefRapportElements']; ?>" width="200" height="50"></canvas>
+                             <?php foreach ($stats as $key => $stat) { ?>
+                             <p class="text-center"><?= $stat['nomElement']; ?> </p>
+                             <canvas id="Evol-<?= $stat['RefRapportElements']; ?>" width="200" height="50"></canvas>
                              <script>
-                             const ctx<?= $chart['RefRapportElements']; ?> = document.getElementById(
-                                 'evol-<?= $chart['RefRapportElements']; ?>');
-                             const myChart<?= $chart['RefRapportElements']; ?> = new Chart(
-                                 ctx<?= $chart['RefRapportElements']; ?>, {
+                             const ct<?= $stat['RefRapportElements']; ?> = document.getElementById(
+                                 'Evol-<?= $stat['RefRapportElements']; ?>');
+                             const mChart<?= $stat['RefRapportElements']; ?> = new Chart(
+                                 ct<?= $stat['RefRapportElements']; ?>, {
                                      type: 'line',
                                      data: {
                                          labels: [
-                                             'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+                                             <?php foreach ($getMois as $mois) { ?> '<?= $mois['Mois'] . ' ' . $mois['year']; ?>',
+                                             <?php } ?>
+
                                          ],
                                          datasets: [{
-                                                 label: 'Previsions',
-                                                 data: [12, 19, 3, 5, 2, 3],
-                                                 backgroundColor: '#f05545',
-                                                 borderColor: '#f05545',
-                                                 borderWidth: 1
-                                             },
-                                             {
-                                                 label: 'Mois en cours',
-                                                 data: [30, 45, 53, 55, 12, 13],
-                                                 backgroundColor: '#005ecb',
-
-                                                 borderColor: '#005ecb',
-                                                 borderWidth: 1
-                                             }
-
-                                         ]
+                                             label: 'Mois en cours',
+                                             data: [
+                                                 <?php foreach ($getMois[$key] as $mois) { ?>
+                                                 <?= number_format($mois['data']['Smoisencours'], 0); ?>,
+                                                 <?php } ?>
+                                             ],
+                                             backgroundColor: [
+                                                 'rgba(255, 99, 132, 0.2)',
+                                             ],
+                                             borderColor: [
+                                                 'rgba(255, 99, 132, 1)',
+                                             ],
+                                             borderWidth: 1
+                                         }]
                                      },
                                      options: {
                                          scales: {
@@ -301,11 +300,19 @@
 
 
 
+
+
+
+
+
+
+
+                             <?php } ?>
                          </div><!-- .card -->
                      </div><!-- .col -->
                  </div>
              </div>
-             <?php } ?>
+
 
          </div>
      </div>

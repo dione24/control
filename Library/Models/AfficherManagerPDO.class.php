@@ -104,11 +104,11 @@ class AfficherManagerPDO extends \Library\Models\AfficherManager
 
 
 
-    public function getCharts($mois, $annee, $pole, $entreprise)
+    public function getChartsContent($mois, $annee, $pole, $entreprise, $elements)
     {
-        $requete = "SELECT  dashboard.*,tblmois.Mois,tblmois.RefMois,SUM(moisencours) AS Smoisencours,SUM(moisn1) AS Smoisn1,SUM(moisprecedent) AS Smoisprecedent,SUM(previsions) AS Sprevisions FROM dashboard INNER JOIN tblchart ON tblchart.RefRapportElements=dashboard.RefRapportElements INNER JOIN tblmois ON tblmois.RefMois=dashboard.RefMois ";
+        $requete = "SELECT  dashboard.*,tblmois.Mois,tblmois.RefMois,SUM(moisencours) AS Smoisencours,SUM(moisn1) AS Smoisn1,SUM(moisprecedent) AS Smoisprecedent,SUM(previsions) AS Sprevisions FROM dashboard INNER JOIN tblchart ON tblchart.RefRapportElements=dashboard.RefRapportElements RIGHT JOIN tblmois ON tblmois.RefMois=dashboard.RefMois WHERE dashboard.RefRapportElements=" . $elements;
         if (!empty($mois) or !empty($annee) or !empty($pole) or !empty($entreprise)) {
-            $requete .= " WHERE";
+            $requete .= " AND";
         }
 
         if (!empty($mois) && !empty($annee)) {
@@ -136,16 +136,42 @@ class AfficherManagerPDO extends \Library\Models\AfficherManager
         $query = $this->dao->prepare($requete);
         $query->execute();
         $results = $query->fetchAll();
-        echo $requete;
         return $results;
     }
 
 
+    public  function ElementsUser()
+    {
+        $requete = $this->dao->prepare("SELECT * FROM tblrapportelements INNER JOIN tblchart ON  tblchart.RefRapportElements=tblrapportelements.RefRapportElements WHERE tblchart.RefUsers=:id");
+        $requete->bindValue(':id', $_SESSION['RefUsers']);
+        $requete->execute();
+        $results = $requete->fetchAll();
+        return $results;
+    }
 
 
+    public function getMois($moisencours, $annee)
+    {
+        $requete = $this->dao->prepare("(SELECT *,($annee -1) AS year FROM tblmois WHERE RefMois >:moisencours ORDER BY RefMois DESC) UNION (SELECT *,$annee AS year FROM tblmois WHERE RefMois <=:moisencours ORDER BY RefMois DESC) ");
+        $requete->bindValue(':moisencours', $moisencours);
+        $requete->execute();
+        $results = $requete->fetchAll();
+        return $results;
+    }
 
-
-
+    public function getContent($mois, $annee, $pool, $entreprise, $elements)
+    {
+        $requete = "SELECT dashboard.*,SUM(moisencours) AS Smoisencours,SUM(moisn1) AS Smoisn1,SUM(moisprecedent) AS Smoisprecedent,SUM(previsions) AS Sprevisions FROM dashboard WHERE RefRapportElements=$elements AND annee=$annee AND RefMois=$mois";
+        if (!empty($entreprise)) {
+            $requete .= " AND RefEntreprise=$entreprise";
+        } elseif (!empty($pool)) {
+            $requete .= " AND RefPole=$pool";
+        }
+        $query = $this->dao->prepare($requete);
+        $query->execute();
+        $results = $query->fetch();
+        return $results;
+    }
 
 
 
