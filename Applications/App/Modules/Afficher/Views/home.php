@@ -257,7 +257,7 @@
                                  </div>
                              </div>
                              <?php foreach ($stats as $key => $stat) { ?>
-                             <p class="text-center"><?= $stat['nomElement']; ?> </p>
+                             <h4 class="text-center"><?= $stat['nomElement']; ?> </h4>
                              <canvas id="Evol-<?= $stat['RefRapportElements']; ?>" width="200" height="50"></canvas>
                              <script>
                              const ct<?= $stat['RefRapportElements']; ?> = document.getElementById(
@@ -274,8 +274,8 @@
                                          datasets: [{
                                              label: 'Mois en cours',
                                              data: [
-                                                 <?php foreach ($getMois[$key] as $mois) { ?>
-                                                 <?= number_format($mois['data']['Smoisencours'], 0); ?>,
+                                                 <?php foreach ($getMois as $ck => $mois) { ?>
+                                                 <?= number_format($content[$key][$ck]['Smoisencours'], 0, '', ''); ?>,
                                                  <?php } ?>
                                              ],
                                              backgroundColor: [

@@ -14,35 +14,6 @@ class AfficherManagerPDO extends \Library\Models\AfficherManager
         $results = $requete->fetchAll();
         return $results;
     }
-
-    public function getKpis($mois, $annee, $pole, $entreprise)
-    {
-        $requete = "SELECT  dashboard.*,SUM(moisencours) AS Smoisencours,SUM(moisn1) AS Smoisn1,SUM(moisprecedent) AS Smoisprecedent,SUM(previsions) AS Sprevisions FROM dashboard";
-        if (!empty($mois) or !empty($annee) or !empty($pole) or !empty($entreprise)) {
-            $requete .= " WHERE";
-        }
-        if (!empty($annee)) {
-            $requete .= " annee=$annee";
-        }
-        if (!empty($mois) && !empty($annee)) {
-            if (!empty($annee)) {
-                $requete .= " AND";
-            }
-            $requete .= " RefMois=$mois";
-        }
-        if (!empty($annee) && !empty($pole) && empty($entreprise)) {
-
-            $requete .= " AND RefPole=$pole";
-        }
-        if (!empty($annee) && !empty($entreprise)) {
-            $requete .= "  AND RefEntreprise=$entreprise";
-        }
-        $query = $this->dao->prepare($requete);
-        $query->execute();
-        $results = $query->fetchAll();
-        return $results;
-    }
-
     public function UserCharts()
     {
         $requete = $this->dao->prepare("SELECT * FROM tblchart INNER JOIN tblrapportelements ON tblrapportelements.RefRapportElements=tblchart.RefRapportElements WHERE RefUsers=:id");
@@ -51,8 +22,6 @@ class AfficherManagerPDO extends \Library\Models\AfficherManager
         $results = $requete->fetchAll();
         return $results;
     }
-
-
 
     public function getElementsValue($rapport)
     {
@@ -63,23 +32,20 @@ class AfficherManagerPDO extends \Library\Models\AfficherManager
         return $results;
     }
 
-
-
-
     public function getDash($mois, $annee, $pole, $entreprise)
     {
-        $requete = "SELECT  dashboard.*,SUM(moisencours) AS Smoisencours,SUM(moisn1) AS Smoisn1,SUM(moisprecedent) AS Smoisprecedent,SUM(previsions) AS Sprevisions FROM dashboard";
+        $requete = "SELECT  dashboard.*,SUM(moisencours) AS Smoisencours,SUM(moisn1) AS Smoisn1,SUM(moisprecedent) AS Smoisprecedent,SUM(previsions) AS Sprevisions FROM dashboard INNER JOIN tblrapports ON dashboard.RefRapport=tblrapports.RefRapport";
         if (!empty($mois) or !empty($annee) or !empty($pole) or !empty($entreprise)) {
             $requete .= " WHERE";
         }
         if (!empty($annee)) {
-            $requete .= " annee=$annee";
+            $requete .= " tblrapports.annee=$annee";
         }
         if (!empty($mois) && !empty($annee)) {
             if (!empty($annee)) {
                 $requete .= " AND";
             }
-            $requete .= " RefMois=$mois";
+            $requete .= " tblrapports.RefMois=$mois";
         }
         if (!empty($annee) && !empty($pole) && empty($entreprise)) {
 
@@ -94,6 +60,7 @@ class AfficherManagerPDO extends \Library\Models\AfficherManager
         if ($_SESSION['Statut'] == 'user') {
             $requete .= " AND RefEntreprise=" . $_SESSION['RefEntreprise'];
         }
+        $requete .= " AND tblrapports.status=2";
 
         $requete .= " GROUP BY RefRapport";
         $query = $this->dao->prepare($requete);
@@ -102,42 +69,6 @@ class AfficherManagerPDO extends \Library\Models\AfficherManager
         return $results;
     }
 
-
-
-    public function getChartsContent($mois, $annee, $pole, $entreprise, $elements)
-    {
-        $requete = "SELECT  dashboard.*,tblmois.Mois,tblmois.RefMois,SUM(moisencours) AS Smoisencours,SUM(moisn1) AS Smoisn1,SUM(moisprecedent) AS Smoisprecedent,SUM(previsions) AS Sprevisions FROM dashboard INNER JOIN tblchart ON tblchart.RefRapportElements=dashboard.RefRapportElements RIGHT JOIN tblmois ON tblmois.RefMois=dashboard.RefMois WHERE dashboard.RefRapportElements=" . $elements;
-        if (!empty($mois) or !empty($annee) or !empty($pole) or !empty($entreprise)) {
-            $requete .= " AND";
-        }
-
-        if (!empty($mois) && !empty($annee)) {
-
-            $requete .= " (annee < $annee OR  (tblmois.RefMois < $mois AND annee=$annee) )";
-        }
-        if (!empty($annee) && !empty($pole) && empty($entreprise)) {
-
-            $requete .= " AND RefPole=$pole";
-        }
-        if (
-            !empty($annee)
-            && !empty($entreprise)
-        ) {
-            $requete .= "  AND RefEntreprise=$entreprise";
-        }
-        if ($_SESSION['Statut'] == 'user') {
-            $requete .= " AND RefEntreprise=" . $_SESSION['RefEntreprise'];
-        }
-        $requete .= " AND tblchart.RefUsers=" . $_SESSION['RefUsers'];
-
-
-
-        $requete .= " GROUP BY RefRapportElements ORDER BY annee,tblmois.RefMois DESC LIMIT 12 ";
-        $query = $this->dao->prepare($requete);
-        $query->execute();
-        $results = $query->fetchAll();
-        return $results;
-    }
 
 
     public  function ElementsUser()
@@ -161,58 +92,16 @@ class AfficherManagerPDO extends \Library\Models\AfficherManager
 
     public function getContent($mois, $annee, $pool, $entreprise, $elements)
     {
-        $requete = "SELECT dashboard.*,SUM(moisencours) AS Smoisencours,SUM(moisn1) AS Smoisn1,SUM(moisprecedent) AS Smoisprecedent,SUM(previsions) AS Sprevisions FROM dashboard WHERE RefRapportElements=$elements AND annee=$annee AND RefMois=$mois";
+        $requete = "SELECT dashboard.*,SUM(moisencours) AS Smoisencours,SUM(moisn1) AS Smoisn1,SUM(moisprecedent) AS Smoisprecedent,SUM(previsions) AS Sprevisions FROM dashboard INNER JOIN tblrapports ON dashboard.RefRapport=tblrapports.RefRapport WHERE RefRapportElements=$elements AND tblrapports.annee=$annee AND tblrapports.RefMois=$mois";
         if (!empty($entreprise)) {
             $requete .= " AND RefEntreprise=$entreprise";
         } elseif (!empty($pool)) {
             $requete .= " AND RefPole=$pool";
         }
+        $requete .= " AND tblrapports.status=2";
         $query = $this->dao->prepare($requete);
         $query->execute();
         $results = $query->fetch();
-        return $results;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function getKpises($mois, $annee, $pole, $entreprise)
-    {
-        $requete = "SELECT  dashboard.*,SUM(moisencours) AS Smoisencours,SUM(moisn1) AS Smoisn1,SUM(moisprecedent) AS Smoisprecedent,SUM(previsions) AS Sprevisions FROM dashboard";
-        if (!empty($mois) or !empty($annee) or !empty($pole) or !empty($entreprise)) {
-            $requete .= " WHERE";
-        }
-        if (!empty($annee)) {
-            $requete .= " annee=$annee";
-        }
-        if (!empty($mois) && !empty($annee)) {
-            if (!empty($annee)) {
-                $requete .= " AND";
-            }
-            $requete .= " RefMois=$mois";
-        }
-        if (!empty($annee) && !empty($pole) && empty($entreprise)) {
-
-            $requete .= " AND RefPole=$pole";
-        }
-        if (!empty($annee) && !empty($entreprise)) {
-            $requete .= "  AND RefEntreprise=$entreprise";
-        }
-        $query = $this->dao->prepare($requete);
-        $query->execute();
-        $results = $query->fetchAll();
         return $results;
     }
 }

@@ -24,18 +24,18 @@ class AfficherController extends \Library\BackController
         $dash = $this->managers->getManagerOf("Afficher")->getDash($month, $year, $request->postData('RefPole'), $request->postData('RefEntreprise'));
         $stats = $this->managers->getManagerOf("Afficher")->ElementsUser();
         $getMois = $this->managers->getManagerOf("Afficher")->getMois($month, $year);
-
+        $content = [];
         foreach ($dash as $key => $value) {
             $dash[$key]['elements'] = $this->managers->getManagerOf("Afficher")->getElementsValue($value['RefRapport']);
         }
         foreach ($stats as $key1 => $value1) {
             //  $stats[$key1]['content'] = $this->managers->getManagerOf("Afficher")->getChartsContent($month, $year, $request->postData('RefPole'), $request->postData('RefEntreprise'), $value1['RefRapportElements']);
             foreach ($getMois as $cle => $value) {
-                $getMois[$key1][$cle]['data'] = $this->managers->getManagerOf("Afficher")->getContent($value['RefMois'], $value['year'], $request->postData('RefPole'), $request->postData('RefEntreprise'), $value1['RefRapportElements']);
+                $content[$key1][$cle] = $this->managers->getManagerOf("Afficher")->getContent($value['RefMois'], $value['year'], $request->postData('RefPole'), $request->postData('RefEntreprise'), $value1['RefRapportElements']);
             }
         }
 
-
+        $this->page->addVar("content", $content);
         $this->page->addVar("dash", $dash);
         $this->page->addVar("stats", $stats);
         $this->page->addVar("getMois", $getMois);
