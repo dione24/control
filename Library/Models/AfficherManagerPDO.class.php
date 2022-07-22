@@ -34,7 +34,7 @@ class AfficherManagerPDO extends \Library\Models\AfficherManager
 
     public function getDash($mois, $annee, $pole, $entreprise)
     {
-        $requete = "SELECT  dashboard.*,SUM(moisencours) AS Smoisencours,SUM(moisn1) AS Smoisn1,SUM(moisprecedent) AS Smoisprecedent,SUM(previsions) AS Sprevisions FROM dashboard INNER JOIN tblrapports ON dashboard.RefRapport=tblrapports.RefRapport";
+        $requete = "SELECT  dashboard.*,SUM(moisencours) AS Smoisencours,SUM(moisn1) AS Smoisn1,SUM(moisprecedent) AS Smoisprecedent,SUM(previsions) AS Sprevisions FROM dashboard INNER JOIN tblrapports ON dashboard.RefRapport=tblrapports.RefRapport ";
         if (!empty($mois) or !empty($annee) or !empty($pole) or !empty($entreprise)) {
             $requete .= " WHERE";
         }
@@ -49,16 +49,16 @@ class AfficherManagerPDO extends \Library\Models\AfficherManager
         }
         if (!empty($annee) && !empty($pole) && empty($entreprise)) {
 
-            $requete .= " AND RefPole=$pole";
+            $requete .= " AND dashboard.RefPole=$pole";
         }
         if (
             !empty($annee)
             && !empty($entreprise)
         ) {
-            $requete .= "  AND RefEntreprise=$entreprise";
+            $requete .= "  AND dashboard.RefEntreprise=$entreprise";
         }
         if ($_SESSION['Statut'] == 'user') {
-            $requete .= " AND RefEntreprise=" . $_SESSION['RefEntreprise'];
+            $requete .= " AND dashboard.RefEntreprise=" . $_SESSION['RefEntreprise'];
         }
         $requete .= " AND tblrapports.status=2";
 
@@ -66,6 +66,30 @@ class AfficherManagerPDO extends \Library\Models\AfficherManager
         $query = $this->dao->prepare($requete);
         $query->execute();
         $results = $query->fetchAll();
+        foreach ($results as $key => $value) {
+
+            $results[$key]['reports'] = $this->getReporting($pole, $value['RefTypeRapport'], $mois, $annee, $entreprise);
+        }
+        return $results;
+    }
+
+    public function getReporting($pole, $typerapport, $mois, $annee, $enterprise)
+    {
+        if (!empty($pole) && empty($enterprise)) {
+            $requete = $this->dao->prepare("SELECT * FROM tblreporting INNER JOIN tblpole ON tblpole.RefPole=tblreporting.RefPole WHERE tblreporting.RefPole=:pole AND RefTypeRapport=:typerapport AND RefMois=:mois AND annee=:annee");
+            $requete->bindValue(':pole', $pole);
+        } elseif (empty($enterprise) && empty($pole)) {
+            $requete = $this->dao->prepare("SELECT * FROM tblreporting INNER JOIN tblpole ON tblpole.RefPole=tblreporting.RefPole  WHERE RefTypeRapport=:typerapport AND RefMois=:mois AND annee=:annee");
+        } else {
+            return [];
+        }
+        $requete->bindValue(':typerapport', $typerapport);
+
+
+        $requete->bindValue(':mois', $mois);
+        $requete->bindValue(':annee', $annee);
+        $requete->execute();
+        $results = $requete->fetchAll();
         return $results;
     }
 
@@ -94,7 +118,7 @@ class AfficherManagerPDO extends \Library\Models\AfficherManager
     {
         $requete = "SELECT dashboard.*,SUM(moisencours) AS Smoisencours,SUM(moisn1) AS Smoisn1,SUM(moisprecedent) AS Smoisprecedent,SUM(previsions) AS Sprevisions FROM dashboard INNER JOIN tblrapports ON dashboard.RefRapport=tblrapports.RefRapport WHERE RefRapportElements=$elements AND tblrapports.annee=$annee AND tblrapports.RefMois=$mois";
         if (!empty($entreprise)) {
-            $requete .= " AND RefEntreprise=$entreprise";
+            $requete .= " AND dashboard.RefEntreprise=$entreprise";
         } elseif (!empty($pool)) {
             $requete .= " AND RefPole=$pool";
         }

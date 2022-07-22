@@ -3,6 +3,7 @@
     <route url="/" module="Afficher" action="home"/>
 
     <route url="/rapports/ajouter/([0-9]+)" module="Administrer" vars="id" action="form"/>
+    <route url="/rapports/reporting/([0-9]+)" module="Administrer" vars="id" action="reporting"/>
 
 
     <route url="/entreprises/index" module="Administrer" action="entreprise"/>

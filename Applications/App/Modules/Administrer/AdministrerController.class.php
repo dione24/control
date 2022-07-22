@@ -142,4 +142,29 @@ class AdministrerController extends \Library\BackController
         $this->managers->getManagerOf('Administrer')->updateStatut($request->getData('statut'), $request->getData('rapport'));
         $this->app()->httpResponse()->redirect("/rapports/control/index");
     }
+
+
+
+
+    public function executeReporting(\Library\HTTPRequest $request)
+    {
+        $this->page->addVar("titles", "Ajouter un Reporting ");
+
+        $mois = $this->managers->getManagerOf('Administrer')->getMois();
+        $this->page->addVar("mois", $mois);
+
+        $rapport = $this->managers->getManagerOf("Administrer")->singleRapport($request->getData('id'));
+        $this->page->addVar("rapport", $rapport);
+
+
+        $verif = $this->managers->getManagerOf("Administrer")->verifRapport($request->getData('id'));
+        $this->page->addVar("verif", $verif);
+
+        $pools = $this->managers->getManagerOf("Administrer")->getPoles();
+        $this->page->addVar("pools", $pools);
+        if ($request->method() == 'POST') {
+            $this->managers->getManagerOf('Administrer')->addReporting($request);
+            $this->app()->httpResponse()->redirect("/rapports/kpi");
+        }
+    }
 }

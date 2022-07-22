@@ -21,6 +21,11 @@ class AfficherController extends \Library\BackController
         $year = ($request->method() == 'POST') ? $request->postData('year') : date('Y', strtotime($date));
         $this->page->addVar("month", $month);
         $this->page->addVar("year", $year);
+        $pool = ($request->method() == 'POST') ? $request->postData('RefPole') : '';
+        $this->page->addVar("pool", $pool);
+        $enterprise = ($request->method() == 'POST') ? $request->postData('RefEntreprise') : '';
+        $this->page->addVar("enterprise", $enterprise);
+
         $dash = $this->managers->getManagerOf("Afficher")->getDash($month, $year, $request->postData('RefPole'), $request->postData('RefEntreprise'));
         $stats = $this->managers->getManagerOf("Afficher")->ElementsUser();
         $getMois = $this->managers->getManagerOf("Afficher")->getMois($month, $year);

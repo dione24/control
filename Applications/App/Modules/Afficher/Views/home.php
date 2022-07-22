@@ -62,7 +62,7 @@
                                                      <option value="">Entreprise</option>
                                                      <?php foreach ($entreprises as $key => $entreprise) { ?>
                                                      <option value="<?= $entreprise['RefEntreprise']; ?>"
-                                                         <?php if (isset($entreprise) && $entreprise['RefEntreprise'] == $entreprise) { ?>
+                                                         <?php if (isset($enterprise) && $entreprise['RefEntreprise'] == $enterprise) { ?>
                                                          selected <?php } ?>>
                                                          <?= $entreprise['nomEntreprise']; ?></option>
                                                      <?php } ?>
@@ -219,9 +219,9 @@
                                                      <?= $intitule['moisn1']; ?>,
                                                      <?php } ?>
                                                  ],
-                                                 backgroundColor: '#df78ef',
+                                                 backgroundColor: '#d05ce3',
 
-                                                 borderColor: '#df78ef',
+                                                 borderColor: '#d05ce3',
                                                  borderWidth: 1
                                              }
 
@@ -236,84 +236,113 @@
                                      }
                                  });
                              </script>
+                             <div class="alert alert-pro alert-primary">
+                                 <div class="alert-text">
+                                     <h6>COMMENTAIRES</h6>
+                                     <?php foreach ($rapport['reports'] as $contenu) { ?>
+                                     <p class="font-weight-bold"> <?= $contenu['nomPole']; ?></p>
+                                     <p class=" font-weight-bold"">
+                                         <?= $contenu['reporting']; ?>
+                                                </p>
+                                     <?php } ?>
+                                 </div>
+                             </div>
+                      
+
+
                              <?php } ?>
-
-
                          </div><!-- .card -->
                      </div><!-- .col -->
                  </div>
              </div>
-             <div class="nk-block">
-                 <div class="row g-gs">
-                     <div class="col-md-12 col-xxl-8">
-                         <div class="card card-bordered card-full">
-                             <div class="card-inner border-bottom">
-                                 <div class="card-title-group">
-                                     <div class="card-title">
-                                         <h6 class="title">Evolution</h6>
-                                     </div>
-                                     <div class="card-tools">
+             <div class=" nk-block">
+                                     <div class="row g-gs">
+                                         <div class="col-md-12 col-xxl-8">
+                                             <div class="card card-bordered card-full">
+                                                 <div class="card-inner border-bottom">
+                                                     <div class="card-title-group">
+                                                         <div class="card-title">
+                                                             <h6 class="title">Evolution</h6>
+                                                         </div>
+                                                         <div class="card-tools">
+                                                         </div>
+                                                     </div>
+                                                 </div>
+                                                 <?php foreach ($stats as $key => $stat) { ?>
+                                                 <h4 class="text-center"><?= $stat['nomElement']; ?> </h4>
+                                                 <canvas id="Evol-<?= $stat['RefRapportElements']; ?>" width="200"
+                                                     height="50"></canvas>
+                                                 <script>
+                                                 const ct<?= $stat['RefRapportElements']; ?> = document.getElementById(
+                                                     'Evol-<?= $stat['RefRapportElements']; ?>');
+                                                 const mChart<?= $stat['RefRapportElements']; ?> = new Chart(
+                                                     ct<?= $stat['RefRapportElements']; ?>, {
+                                                         type: 'line',
+                                                         data: {
+                                                             labels: [
+                                                                 <?php foreach ($getMois as $mois) { ?> '<?= $mois['Mois'] . ' ' . $mois['year']; ?>',
+                                                                 <?php } ?>
+
+                                                             ],
+                                                             datasets: [{
+                                                                     label: 'Mois en cours',
+                                                                     data: [
+                                                                         <?php foreach ($getMois as $ck => $mois) { ?>
+                                                                         <?= number_format($content[$key][$ck]['Smoisencours'], 0, '', ''); ?>,
+                                                                         <?php } ?>
+                                                                     ],
+                                                                     backgroundColor: [
+                                                                         'rgba(255, 99, 132, 0.2)',
+                                                                     ],
+                                                                     borderColor: [
+                                                                         'rgba(255, 99, 132, 1)',
+                                                                     ],
+                                                                     borderWidth: 1
+                                                                 },
+                                                                 {
+                                                                     label: 'Mois N-1 ',
+                                                                     data: [
+                                                                         <?php foreach ($getMois as $ck => $mois) { ?>
+                                                                         <?= number_format($content[$key][$ck]['Smoisn1'], 0, '', ''); ?>,
+                                                                         <?php } ?>
+                                                                     ],
+                                                                     backgroundColor: [
+                                                                         'rgba(54, 162, 235, 0.2)',
+                                                                     ],
+                                                                     borderColor: [
+                                                                         'rgba(54, 162, 235, 1)',
+                                                                     ],
+                                                                     borderWidth: 1
+                                                                 },
+                                                                 {
+                                                                     label: 'Précédent ',
+                                                                     data: [
+                                                                         <?php foreach ($getMois as $ck => $mois) { ?>
+                                                                         <?= number_format($content[$key][$ck]['Sprevisions'], 0, '', ''); ?>,
+                                                                         <?php } ?>
+                                                                     ],
+                                                                     backgroundColor: ' #c63f17',
+                                                                     borderColor: '#c63f17',
+                                                                     borderWidth: 1
+                                                                 }
+
+                                                             ]
+                                                         },
+                                                         options: {
+                                                             scales: {
+                                                                 y: {
+                                                                     beginAtZero: true
+                                                                 }
+                                                             }
+                                                         }
+                                                     });
+                                                 </script>
+                                                 <?php } ?>
+                                             </div><!-- .card -->
+                                         </div><!-- .col -->
+
                                      </div>
                                  </div>
                              </div>
-                             <?php foreach ($stats as $key => $stat) { ?>
-                             <h4 class="text-center"><?= $stat['nomElement']; ?> </h4>
-                             <canvas id="Evol-<?= $stat['RefRapportElements']; ?>" width="200" height="50"></canvas>
-                             <script>
-                             const ct<?= $stat['RefRapportElements']; ?> = document.getElementById(
-                                 'Evol-<?= $stat['RefRapportElements']; ?>');
-                             const mChart<?= $stat['RefRapportElements']; ?> = new Chart(
-                                 ct<?= $stat['RefRapportElements']; ?>, {
-                                     type: 'line',
-                                     data: {
-                                         labels: [
-                                             <?php foreach ($getMois as $mois) { ?> '<?= $mois['Mois'] . ' ' . $mois['year']; ?>',
-                                             <?php } ?>
-
-                                         ],
-                                         datasets: [{
-                                             label: 'Mois en cours',
-                                             data: [
-                                                 <?php foreach ($getMois as $ck => $mois) { ?>
-                                                 <?= number_format($content[$key][$ck]['Smoisencours'], 0, '', ''); ?>,
-                                                 <?php } ?>
-                                             ],
-                                             backgroundColor: [
-                                                 'rgba(255, 99, 132, 0.2)',
-                                             ],
-                                             borderColor: [
-                                                 'rgba(255, 99, 132, 1)',
-                                             ],
-                                             borderWidth: 1
-                                         }]
-                                     },
-                                     options: {
-                                         scales: {
-                                             y: {
-                                                 beginAtZero: true
-                                             }
-                                         }
-                                     }
-                                 });
-                             </script>
-
-
-
-
-
-
-
-
-
-
-
-                             <?php } ?>
-                         </div><!-- .card -->
-                     </div><!-- .col -->
-                 </div>
-             </div>
-
-
-         </div>
-     </div>
- </div>
+                         </div>
+                     </div>

@@ -227,4 +227,16 @@ class AdministrerManagerPDO extends \Library\Models\AdministrerManager
         $requete->bindValue(':RefRapport', $rapport, \PDO::PARAM_INT);
         $requete->execute();
     }
+
+    public function addReporting()
+    {
+        $query = $this->dao->prepare("INSERT INTO tblreporting(RefPole,RefTypeRapport,RefMois,annee,reporting,RefUsers) VALUES(:RefPole,:RefTypeRapport,:RefMois,:annee,:reporting,:RefUsers)");
+        $query->bindValue(':RefPole', $_POST['RefPole'], \PDO::PARAM_INT);
+        $query->bindValue(':RefTypeRapport', $_POST['RefTypeRapport'], \PDO::PARAM_INT);
+        $query->bindValue(':RefMois', $_POST['RefMois'], \PDO::PARAM_INT);
+        $query->bindValue(':annee', $_POST['annee'], \PDO::PARAM_INT);
+        $query->bindValue(':reporting', $_POST['reporting'], \PDO::PARAM_STR);
+        $query->bindValue(':RefUsers', $_SESSION['RefUsers'], \PDO::PARAM_INT);
+        $query->execute();
+    }
 }

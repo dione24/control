@@ -42,6 +42,8 @@
                                                  class="btn btn-success"><i class="fas fa-plus-circle"> </i></a>
                                              <a href="/rapports/view/<?= $rapport['RefTypeRapport']; ?>"
                                                  class="btn btn-primary"><i class="fas fa-eye"> </i></a>
+                                             <a href="/rapports/reporting/<?= $rapport['RefTypeRapport']; ?>"
+                                                 class="btn btn-warning"><i class="fas fa-pen"> </i></a>
                                          </td>
                                      </tr>
                                      <?php } ?>
